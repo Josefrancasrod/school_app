@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class HomeworkScreen extends StatelessWidget {
+class ScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Homework screen'),
+        child: Text('Schedule'),
       ),
     );
   }

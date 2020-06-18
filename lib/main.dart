@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './screens/homework_screen.dart';
+import './screens/tabs_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: Colors.purple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeworkScreen(),
+      home: TabsScreen(),
     );
   }
 }
