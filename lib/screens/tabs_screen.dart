@@ -59,7 +59,9 @@ class _TabsScreenState extends State<TabsScreen> {
       ),
       body: _pages[_selectedPageIndex]['page'],
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          //Add a new[Homework, Class, ]
+        },
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
