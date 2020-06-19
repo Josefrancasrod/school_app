@@ -17,7 +17,7 @@ class _TabsScreenState extends State<TabsScreen> {
   void initState() {
     // TODO: implement initState
     _pages = [
-      {'page': HomeworkScreen(), 'title': 'My homework'},
+      {'page': HomeworkScreen(), 'title': 'My Homework'},
       {'page': SignatureScreen(), 'title': 'My Signatures'},
       {'page': ScheduleScreen(), 'title': 'My Schedule'},
     ];
