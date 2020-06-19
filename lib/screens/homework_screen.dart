@@ -10,11 +10,6 @@ class HomeworkScreen extends StatelessWidget {
     final homework = Provider.of<Homework>(context);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: ListView.builder(
         itemCount: homework.itemCount,
         itemBuilder: (ctx, i) => hw.HomeworkItem(

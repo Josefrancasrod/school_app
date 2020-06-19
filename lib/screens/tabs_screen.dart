@@ -12,7 +12,6 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   List<Map<String, dynamic>> _pages;
   int _selectedPageIndex = 0;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -25,44 +24,90 @@ class _TabsScreenState extends State<TabsScreen> {
     super.initState();
   }
 
-  void _selectPage(int index){
+  void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  Color _selectedOption(int index) {
+    return index == _selectedPageIndex ? Colors.white : Colors.blueAccent;
+  }
+
+  Widget _bottomButtonsCreation(
+      Color color, Function function, IconData icon, int index) {
+    return FlatButton(
+      onPressed: function,
+      child: Icon(
+        icon,
+        color: color,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //This can be dynammic
-        title: Text(_pages[_selectedPageIndex]['title']),
-        // actions: <Widget>[
-        //   IconButton(
-        //     icon: Icon(Icons.add),
-        //     onPressed: () {},
-        //   )
-        // ],
+        backgroundColor: Colors.white,
+        title: Center(
+          child: Text(
+            _pages[_selectedPageIndex]['title'],
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
       ),
       body: _pages[_selectedPageIndex]['page'],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _selectPage,
-        currentIndex: _selectedPageIndex,
-        
-        items: [
-          BottomNavigationBarItem(
-            title: Text('Homework'),
-            icon: Icon(Icons.assignment),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).primaryColor,
+        shape: CircularNotchedRectangle(),
+        child: Container(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  _bottomButtonsCreation(
+                    _selectedOption(0),
+                    () => _selectPage(0),
+                    Icons.assignment,
+                    _selectedPageIndex,
+                  ),
+                  _bottomButtonsCreation(
+                    _selectedOption(1),
+                    () => _selectPage(1),
+                    Icons.school,
+                    _selectedPageIndex,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  _bottomButtonsCreation(
+                    _selectedOption(2),
+                    () => _selectPage(2),
+                    Icons.calendar_today,
+                    _selectedPageIndex,
+                  ),
+                  _bottomButtonsCreation(
+                    _selectedOption(2), //Add a new Screen of user
+                    () => _selectPage(2),
+                    Icons.person,
+                    _selectedPageIndex,
+                  ),
+                ],
+              )
+            ],
           ),
-          BottomNavigationBarItem(
-            title: Text('Class'),
-            icon: Icon(Icons.school),
-          ),
-          BottomNavigationBarItem(
-            title: Text('Schedule'),
-            icon: Icon(Icons.calendar_today),
-          ),
-        ],
+        ),
       ),
     );
   }

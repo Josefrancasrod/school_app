@@ -9,7 +9,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  // This widget is the root of your application
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -21,8 +22,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          secondaryHeaderColor: Colors.purple,
+          primaryColor: Colors.blue[900],
+          accentColor: Colors.amber,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: TabsScreen(),
