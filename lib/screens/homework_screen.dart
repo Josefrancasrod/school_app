@@ -41,12 +41,7 @@ class HomeworkScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  _cardFea(),
-                  _cardFea(),
-                  _cardFea(),
-                  _cardFea(),
-                  _cardFea(),
-                  _cardFea(),
+                  //Here goes more stuff
                 ],
               ),
             ),
