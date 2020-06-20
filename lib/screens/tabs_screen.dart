@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import './profile_screen.dart';
 import './schedule_screen.dart';
 import './signatures_screen.dart';
 import './homework_screen.dart';
@@ -19,6 +20,7 @@ class _TabsScreenState extends State<TabsScreen> {
       {'page': HomeworkScreen(), 'title': 'My Homework'},
       {'page': SignatureScreen(), 'title': 'My Signatures'},
       {'page': ScheduleScreen(), 'title': 'My Schedule'},
+      {'page': ProfileScreen(), 'title': 'My Profile'},
     ];
 
     super.initState();
@@ -100,8 +102,8 @@ class _TabsScreenState extends State<TabsScreen> {
                     _selectedPageIndex,
                   ),
                   _bottomButtonsCreation(
-                    _selectedOption(2), //Add a new Screen of user
-                    () => _selectPage(2),
+                    _selectedOption(3), //Add a new Screen of user
+                    () => _selectPage(3),
                     Icons.person,
                     _selectedPageIndex,
                   ),
