@@ -65,25 +65,6 @@ class HomeworkScreen extends StatelessWidget {
           ),
         ],
       ),
-      // body: ListView.builder(
-      //   itemCount: homework.itemCount,
-      //   itemBuilder: (ctx, i) => hw.HomeworkItem(
-      //     homework.items.values.toList()[i],
-      //   ),
-      // ),
-
-      //       SliverToBoxAdapter(
-      //   child: Container(
-      //     height: 100.0,
-      //     child: ListView.builder(
-      //       scrollDirection: Axis.horizontal,
-      //       itemCount: homework.itemCount,
-      //       itemBuilder: (ctx, i) => hw.HomeworkItem(
-      //         homework.items.values.toList()[i],
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }
