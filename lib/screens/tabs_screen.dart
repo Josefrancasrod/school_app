@@ -49,11 +49,11 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Center(
           child: Text(
             _pages[_selectedPageIndex]['title'],
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(fontWeight: FontWeight.w300),
           ),
         ),
       ),

@@ -12,7 +12,7 @@ class HomeworkItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
       child: Container(
-        height: 100,
+        height: 80,
         child: Card(
           clipBehavior: Clip.hardEdge,
           child: Row(
@@ -38,14 +38,7 @@ class HomeworkItem extends StatelessWidget {
                         homeworkItem.title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                      Text(
-                        homeworkItem.description,
-                        style: TextStyle(
-                          color: Colors.black45,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
                         ),
                       ),
                       Text('Math'),
@@ -61,11 +54,12 @@ class HomeworkItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(
-                      Icons.calendar_today,
+                      Icons.date_range,
                       size: 18,
+                      color: Theme.of(context).primaryColor,
                     ),
                     SizedBox(width: 5),
-                    Text('22/06/19'),
+                    Text('22/06'),
                   ],
                 ),
               ),
