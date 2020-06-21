@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import './screens/new_homework_screen.dart';
 import './screens/tabs_screen.dart';
 import './providers/homework.dart';
 
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: TabsScreen(),
+        routes: {
+          NewHomeworkScreen.routeName: (ctx) => NewHomeworkScreen(),
+        },
       ),
     );
   }
