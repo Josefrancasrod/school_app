@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import './new_homework_screen.dart';
 import './profile_screen.dart';
 import './schedule_screen.dart';
 import './signatures_screen.dart';
@@ -62,6 +63,7 @@ class _TabsScreenState extends State<TabsScreen> {
       body: _pages[_selectedPageIndex]['page'],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.of(context).pushNamed(NewHomeworkScreen.routeName);
           //Add a new[Homework, Class, ]
         },
         child: Icon(Icons.add),

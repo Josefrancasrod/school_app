@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../providers/homework.dart' as homework;
 
@@ -6,6 +7,19 @@ class HomeworkItem extends StatelessWidget {
   final homework.HomeworkItem homeworkItem;
 
   HomeworkItem(this.homeworkItem);
+
+  String _getType(homework.HomeworkType type){
+    var stringType = '';
+    
+    switch(type){
+      case homework.HomeworkType.homework: stringType = "Homework"; break;
+      case homework.HomeworkType.test: stringType = "Test"; break;
+      case homework.HomeworkType.proyect: stringType = "Proyect"; break;
+    }
+    
+    return stringType;
+  
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +55,8 @@ class HomeworkItem extends StatelessWidget {
                           fontSize: 20,
                         ),
                       ),
-                      Text('Math'),
-                      Text('Type: Test'),
+                      Text(homeworkItem.asignature),
+                      Text('Type: ${_getType(homeworkItem.type)}'),
                     ],
                   ),
                 ),
@@ -59,7 +73,7 @@ class HomeworkItem extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                     ),
                     SizedBox(width: 5),
-                    Text('22/06'),
+                    Text(DateFormat.yMMMMd().format(homeworkItem.dueDate)),
                   ],
                 ),
               ),

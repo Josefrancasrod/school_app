@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_app/widgets/homework_item.dart';
 
 enum HomeworkType {
   homework,
@@ -10,48 +11,44 @@ class HomeworkItem {
   String id;
   String title;
   String description;
-  String idMateria;
+  String asignature;
   DateTime dueDate;
-  String type;
+  HomeworkType type;
 
   HomeworkItem({
     this.id,
     this.title,
     this.description,
-    this.idMateria,
+    this.asignature,
     this.dueDate,
     this.type,
   });
 }
 
 class Homework with ChangeNotifier {
-  Map<String, HomeworkItem> _items = {
-    '1': HomeworkItem(
-      id: DateTime.now().toString(),
-      title: 'Math problems',
-      description: 'Problems of the page 201',
-    ),
-    '2': HomeworkItem(
-      id: DateTime.now().toString(),
-      title: 'Code Problems',
-      description: 'Problems of the page 201',
-    ),
-    '3': HomeworkItem(
-      id: DateTime.now().toString(),
-      title: 'Definitions',
-      description: 'Problems of the page 201',
-    ),
-    '4': HomeworkItem(
-      id: DateTime.now().toString(),
-      title: 'Math problems',
-      description: 'Problems of the page 201',
-    ),
-    '5': HomeworkItem(
-      id: DateTime.now().toString(),
-      title: 'More Math problems',
-      description: 'Problems of the page 201',
-    ),
-  };
+  Map<String, HomeworkItem> _items = {};
+
+  void addItem({
+    String id,
+    String title,
+    String description,
+    String selectedClass,
+    DateTime date,
+    HomeworkType type,
+  }) {
+    _items.putIfAbsent(
+      id,
+      () => HomeworkItem(
+        id: DateTime.now().toString(),
+        title: title,
+        description: description,
+        asignature: selectedClass,
+        dueDate: date,
+        type: type,
+      ),
+    );
+    notifyListeners();
+  }
 
   int get itemCount {
     return _items.length;
@@ -60,4 +57,5 @@ class Homework with ChangeNotifier {
   Map<String, HomeworkItem> get items {
     return {..._items};
   }
+
 }
