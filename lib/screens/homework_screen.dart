@@ -3,17 +3,27 @@ import 'package:provider/provider.dart';
 
 import '../providers/homework.dart';
 import '../widgets/homework_item.dart' as hw;
+import '../providers/classes.dart';
 
 class HomeworkScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homework = Provider.of<Homework>(context);
+    final classes = Provider.of<Classes>(context).items;
+
+    Color _getColor(String name) {
+      ClassesItem classItem = classes.firstWhere((element) => element.name == name);
+      
+
+      return classItem.color;
+    }
 
     Widget _listOfHomeWork() {
       return ListView.builder(
         itemCount: homework.itemCount,
         itemBuilder: (ctx, i) => hw.HomeworkItem(
           homework.items.values.toList()[i],
+          _getColor(homework.items.values.toList()[i].asignature),
         ),
       );
     }
@@ -59,8 +69,10 @@ class HomeworkScreen extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (ctx, i) => hw.HomeworkItem(
                 homework.items.values.toList()[i],
+                _getColor(homework.items.values.toList()[i].asignature),
               ),
               childCount: homework.itemCount,
+              
             ),
           ),
         ],
