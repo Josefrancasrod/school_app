@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/homework.dart';
 import '../providers/classes.dart';
+import '../widgets/custom_divider.dart';
 
 class NewHomeworkScreen extends StatefulWidget {
   static const routeName = '/new-homework';
@@ -17,11 +18,13 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   
+  String _classValue;
+  bool tapOnClass = false;
   HomeworkType _type = HomeworkType.homework;
-  String _classValue = 'Math';
   DateTime _selectedDate;
   FocusNode titleNode;
   FocusNode descriptionNode;
+  
 
 
   List<String> listOfClasses = [];
@@ -41,29 +44,6 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
     descriptionNode.dispose();
 
     super.dispose();
-  }
-
-  Widget _divider(String text) {
-    return Row(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          child: Text(
-            text,
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor),
-          ),
-        ),
-        Expanded(
-          child: Divider(
-            color: Theme.of(context).primaryColor,
-            thickness: 1,
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _radioList(String text, HomeworkType recivedValue) {
@@ -126,7 +106,13 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   Widget build(BuildContext context) {
 
     listOfClasses = Provider.of<Classes>(context, listen: false).items.map((item) => item.name).toList();
-
+    
+    if(!tapOnClass){
+      setState(() {
+        _classValue = listOfClasses[0];
+      });
+    }
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -147,7 +133,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    _divider('Title'),
+                    CustomDivider('Title'),
                     TextField(
                       autofocus: true,
                       focusNode: titleNode,
@@ -164,7 +150,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                         FocusScope.of(context).requestFocus(descriptionNode);
                       },
                     ),
-                    _divider('Description'),
+                    CustomDivider('Description'),
                     TextField(
                       focusNode: descriptionNode,
                       controller: descriptionController,
@@ -177,7 +163,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       ), 
                     ),
-                    _divider('Class'),
+                    CustomDivider('Class'),
                     Container(
                       decoration: BoxDecoration(
                           border: Border.all(
@@ -198,6 +184,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                         }).toList(),
                         onTap: (){
                           _unFocusNode();
+                          tapOnClass = true;
                         },
                         onChanged: (value) {
                           
@@ -237,7 +224,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                         Expanded(child: SizedBox()),
                       ],
                     ),
-                    _divider('Type'),
+                    CustomDivider('Type'),
                     Column(
                       children: <Widget>[
                         _radioList('Homework', HomeworkType.homework),

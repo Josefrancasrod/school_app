@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../providers/homework.dart' as homework;
+import '../providers/classes.dart';
 
 class HomeworkItem extends StatelessWidget {
   final homework.HomeworkItem homeworkItem;
+  final Color color;
 
-  HomeworkItem(this.homeworkItem);
+  HomeworkItem(this.homeworkItem, this.color);
 
   String _getType(homework.HomeworkType type){
     var stringType = '';
@@ -20,6 +22,7 @@ class HomeworkItem extends StatelessWidget {
     return stringType;
   
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class HomeworkItem extends StatelessWidget {
                 height: 100,
                 width: 5,
                 decoration: BoxDecoration(
-                  color: Colors.green,
+                  color: color,
                 ),
               ),
               Expanded(

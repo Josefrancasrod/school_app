@@ -21,30 +21,30 @@ class ClassesItem {
 
 class Classes with ChangeNotifier {
   List<ClassesItem> _items = [
-    ClassesItem(
-      id: DateTime.now().toString(),
-      name: 'Math',
-      color: Colors.blue,
-    ),
-    ClassesItem(
-      id: DateTime.now().toString(),
-      name: 'Science',
-      color: Colors.green,
-    ),
-    ClassesItem(
-      id: DateTime.now().toString(),
-      name: 'Spanish',
-      color: Colors.red,
-    ),
-    ClassesItem(
-      id: DateTime.now().toString(),
-      name: 'English',
-      color: Colors.orange,
-    ),
+    
   ];
 
   List<ClassesItem> get items {
     return [..._items];
   }
 
+  void addItem({
+    String id,
+    String name,
+    String teacherName,
+    String classroom,
+    Color color,
+  }) {
+    _items.add(
+      ClassesItem(
+        id: id,
+        name: name,
+        teacherName: teacherName,
+        classroom: classroom,
+        color: color,
+      ),
+    );
+    print(id);
+    notifyListeners();
+  }
 }

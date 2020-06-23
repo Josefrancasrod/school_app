@@ -65,8 +65,7 @@ class ClassesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool containsItems = classesItem == null;
-    return containsItems
-        ? _classesCard(containsItems, context)
-        : _classesCard(containsItems, context);
+    return _classesCard(containsItems, context);
+
   }
 }
