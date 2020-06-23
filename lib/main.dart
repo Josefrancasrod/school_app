@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 
 import './screens/new_homework_screen.dart';
 import './screens/tabs_screen.dart';
+import './screens/new_classes_screen.dart';
+import './screens/classes_detail_screen.dart';
 import './providers/homework.dart';
+import './providers/classes.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +22,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => Homework(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => Classes(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -30,6 +36,8 @@ class MyApp extends StatelessWidget {
         home: TabsScreen(),
         routes: {
           NewHomeworkScreen.routeName: (ctx) => NewHomeworkScreen(),
+          NewClassesScreen.routeName: (ctx) => NewClassesScreen(),
+          ClassesDetailScreen.routeName: (ctx) => ClassesDetailScreen(),
         },
       ),
     );
