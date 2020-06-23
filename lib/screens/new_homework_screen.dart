@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/homework.dart';
+import '../providers/classes.dart';
 
 class NewHomeworkScreen extends StatefulWidget {
   static const routeName = '/new-homework';
@@ -21,6 +22,9 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   DateTime _selectedDate;
   FocusNode titleNode;
   FocusNode descriptionNode;
+
+
+  List<String> listOfClasses = [];
 
   @override
   void initState() {
@@ -120,6 +124,10 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    listOfClasses = Provider.of<Classes>(context, listen: false).items.map((item) => item.name).toList();
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -179,11 +187,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: DropdownButton<String>(
                         value: _classValue,
-                        items: <String>[
-                          'Math',
-                          'Science',
-                          'Spanish',
-                        ].map<DropdownMenuItem<String>>((String value) {
+                        items: listOfClasses.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Padding(

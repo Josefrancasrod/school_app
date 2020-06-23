@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import './new_homework_screen.dart';
 import './profile_screen.dart';
 import './schedule_screen.dart';
-import './signatures_screen.dart';
+import './classes_screen.dart';
 import './homework_screen.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class _TabsScreenState extends State<TabsScreen> {
     // TODO: implement initState
     _pages = [
       {'page': HomeworkScreen(), 'title': 'My Homework'},
-      {'page': SignatureScreen(), 'title': 'My Signatures'},
+      {'page': ClassesScreen(), 'title': 'My Classes'},
       {'page': ScheduleScreen(), 'title': 'My Schedule'},
       {'page': ProfileScreen(), 'title': 'My Profile'},
     ];
@@ -71,6 +71,7 @@ class _TabsScreenState extends State<TabsScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         color: Theme.of(context).primaryColor,
+        notchMargin: 10,
         shape: CircularNotchedRectangle(),
         child: Container(
           height: 60,
