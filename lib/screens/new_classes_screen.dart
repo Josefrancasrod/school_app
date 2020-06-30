@@ -98,7 +98,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  void _addClasses(){
+  void _addClasses() {
     Provider.of<Classes>(context, listen: false).addItem(
       id: DateTime.now().toString(),
       name: _classController.text,
@@ -199,7 +199,9 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                             borderRadius: BorderRadius.circular(5.0),
                           ),
                         ),
-                        Expanded(child: SizedBox()),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
                       ],
                     ),
                   ],
