@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_app/screens/add_schedule_screen.dart';
 
 import './screens/new_homework_screen.dart';
 import './screens/tabs_screen.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           NewHomeworkScreen.routeName: (ctx) => NewHomeworkScreen(),
           NewClassesScreen.routeName: (ctx) => NewClassesScreen(),
           ClassesDetailScreen.routeName: (ctx) => ClassesDetailScreen(),
+          AddScheduleScreen.routeName: (ctx) => AddScheduleScreen(),
         },
       ),
     );
