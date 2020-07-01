@@ -7,17 +7,7 @@ class ScheduleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Text('Schedule'),
-            RaisedButton(
-              onPressed: () {
-                //DELETE THIS AFTER TESTING
-                Navigator.of(context).pushNamed(AddScheduleScreen.routeName);
-              },
-            ),
-          ],
-        ),
+        child: Text('Schedule'),
       ),
     );
   }
