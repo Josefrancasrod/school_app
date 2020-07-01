@@ -1,29 +1,105 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/custom_divider.dart';
+import '../providers/schedule.dart';
+
+enum ButtomType {
+  start,
+  finish,
+}
 
 class AddScheduleScreen extends StatefulWidget {
   static const routeName = '/add-schedule-screen';
-  bool isSelected = false;
+  Map<String, bool> isSelected = {
+    'Monday': false,
+    'Tuesday': false,
+    'Wednesday': false,
+    'Thursday': false,
+    'Friday': false,
+    'Saturday': false,
+  };
 
   @override
   _AddScheduleScreenState createState() => _AddScheduleScreenState();
 }
 
 class _AddScheduleScreenState extends State<AddScheduleScreen> {
+  final _classroomController = TextEditingController();
+
+  TimeOfDay start, finish, entry;
+  List<String> days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+
+  void _timePicker(ButtomType type) async {
+    TimeOfDay entry = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (entry != null) {
+      switch (type) {
+        case ButtomType.start:
+          setState(() {
+            start = entry;
+          });
+          break;
+        case ButtomType.finish:
+          setState(() {
+            finish = entry;
+          });
+          break;
+      }
+    }
+  }
+
+  void _saveSchedule(Map<String, bool> isSelected, List<TimeOfDay> time) {
+    final schedule = Provider.of<Schedule>(context, listen: false);
+    Map<String, Map<String, dynamic>> newSchedule = {};
+
+    for (var i = 0; i < days.length; i++) {
+      if (isSelected[days[i]]) {
+        newSchedule.putIfAbsent(
+            days[i],
+            () => {
+                  'Start': time[0],
+                  'Finish': time[1],
+                  'Classroom': _classroomController.text,
+                });
+      }
+    }
+
+    schedule.addSchedule(
+      ScheduleItem(
+        id: DateTime.now().toString(),
+        weekschedule: newSchedule,
+      ),
+    );
+  }
+
   Widget _filterChip(String text) {
     return FilterChip(
-        label: Text(text),
-        labelStyle:
-            TextStyle(color: widget.isSelected ? Colors.black : Colors.black54),
-        selected: widget.isSelected,
-        onSelected: (bool selected) {
-          setState(() {
-            widget.isSelected = !widget.isSelected;
-          });
-        },
-        selectedColor: Theme.of(context).accentColor,
-        checkmarkColor: Colors.black,
+      label: Container(
+        width: 60,
+        child: Center(child: Text(text)),
+      ),
+      labelStyle: TextStyle(
+        color: widget.isSelected[text] ? Colors.black : Colors.black54,
+        fontSize: 10,
+      ),
+      selected: widget.isSelected[text],
+      onSelected: (bool selected) {
+        setState(() {
+          widget.isSelected[text] = !widget.isSelected[text];
+        });
+      },
+      selectedColor: Theme.of(context).accentColor,
+      checkmarkColor: Colors.black,
     );
   }
 
@@ -88,8 +164,12 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                           ),
                         ),
                         RaisedButton(
-                          onPressed: () {},
-                          child: Text('Start'),
+                          onPressed: () {
+                            _timePicker(ButtomType.start);
+                          },
+                          child: Text(start == null
+                              ? 'Start'
+                              : '${start.format(context)}'),
                           textColor: Colors.white,
                           color: Theme.of(context).primaryColor,
                           shape: RoundedRectangleBorder(
@@ -97,11 +177,15 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: 10,
                         ),
                         RaisedButton(
-                          onPressed: () {},
-                          child: Text('Finish'),
+                          onPressed: () {
+                            _timePicker(ButtomType.finish);
+                          },
+                          child: Text(finish == null
+                              ? 'Finish'
+                              : '${finish.format(context)}'),
                           textColor: Colors.white,
                           color: Theme.of(context).primaryColor,
                           shape: RoundedRectangleBorder(
@@ -110,8 +194,9 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                         ),
                       ],
                     ),
-                    CustomDivider('Room'),
+                    CustomDivider('Classroom'),
                     TextField(
+                      controller: _classroomController,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
@@ -131,7 +216,10 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
             child: RaisedButton(
               color: Theme.of(context).accentColor,
               child: Text('Save'),
-              onPressed: () {},
+              onPressed: () {
+                _saveSchedule(widget.isSelected, [start, finish]);
+                Navigator.of(context).pop();
+              },
             ),
           )
         ],

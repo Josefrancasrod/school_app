@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:school_app/screens/add_schedule_screen.dart';
 
+
+import './providers/schedule.dart';
+import './screens/add_schedule_screen.dart';
 import './screens/new_homework_screen.dart';
 import './screens/tabs_screen.dart';
 import './screens/new_classes_screen.dart';
@@ -25,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => Classes(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Schedule(),
         ),
       ],
       child: MaterialApp(
