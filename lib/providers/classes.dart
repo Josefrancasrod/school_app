@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
+
 class ClassesItem {
   String id;
   String name;
-  String schedule;
   String teacherName;
-  String classroom;
+  Map<String, Map<String, dynamic>> schedule;
   Color color;
 
   ClassesItem({
     this.id,
     this.name,
-    this.schedule,
     this.teacherName,
-    this.classroom,
+    this.schedule,
     this.color,
   });
 }
@@ -32,7 +31,7 @@ class Classes with ChangeNotifier {
     String id,
     String name,
     String teacherName,
-    String classroom,
+    Map<String, Map<String, dynamic>> scheduleItem,
     Color color,
   }) {
     _items.add(
@@ -40,7 +39,7 @@ class Classes with ChangeNotifier {
         id: id,
         name: name,
         teacherName: teacherName,
-        classroom: classroom,
+        schedule: scheduleItem,
         color: color,
       ),
     );

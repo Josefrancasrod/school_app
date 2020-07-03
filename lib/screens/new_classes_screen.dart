@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../widgets/custom_divider.dart';
 import '../providers/classes.dart';
+import '../screens/add_schedule_screen.dart';
 
 class NewClassesScreen extends StatefulWidget {
   static const routeName = '/New-Classes-Screen';
@@ -16,6 +17,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
   final _classController = TextEditingController();
   final _teacherController = TextEditingController();
   final _classroomController = TextEditingController();
+  Map<String, Map<String, dynamic>> newSchedule;
 
   FocusNode _classNode;
   FocusNode _teacherNode;
@@ -103,15 +105,99 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       id: DateTime.now().toString(),
       name: _classController.text,
       teacherName: _teacherController.text,
-      classroom: _classroomController.text,
+      scheduleItem: newSchedule,
       color: classColor,
     );
 
     Navigator.of(context).pop();
   }
 
+  Widget _scheduleCard({String dia, Map<String, dynamic> hour, bool haveDay}) {
+    return InkWell(
+      onTap: !haveDay
+          ? () async {
+              final scheduleItem = await Navigator.pushNamed(
+                      context, AddScheduleScreen.routeName)
+                  as Map<String, Map<String, dynamic>>;
+              setState(() {
+                if (newSchedule == null) {
+                  newSchedule = scheduleItem;
+                } else {
+                  scheduleItem.forEach((key, value) {
+                    newSchedule.putIfAbsent(key, () => value);
+                  });
+                }
+              });
+            }
+          : () {},
+      splashColor: classColor,
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: haveDay
+            ? Column(
+                children: <Widget>[
+                  Text(
+                    dia,
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  Text(
+                    '${hour['Start'].format(context)} - ${hour['Finish'].format(context)}',
+                    style: TextStyle(fontSize: 10, color: Colors.white),
+                  ),
+                  Text(
+                    '${hour['Classroom']}',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ],
+              )
+            : Center(
+                child: Icon(
+                Icons.add,
+                color: Colors.grey,
+              )),
+        decoration: haveDay
+            ? BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    classColor.withOpacity(0.7),
+                    classColor,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(15),
+              )
+            : BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(width: 2, color: Colors.grey),
+              ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> daysList = [];
+
+    if (newSchedule != null) {
+      newSchedule.forEach((key, value) {
+        daysList.add(_scheduleCard(dia: key, hour: value, haveDay: true));
+      });
+      if (daysList.length < 6) {
+        daysList.add(_scheduleCard(haveDay: false));
+      }
+    } else {
+      daysList.add(_scheduleCard(haveDay: false));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('New Class'),
@@ -159,23 +245,6 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                         _focusNextNode(_classroomNode);
                       },
                     ),
-                    CustomDivider('Classroom'),
-                    TextField(
-                      autofocus: true,
-                      focusNode: _classroomNode,
-                      controller: _classroomController,
-                      decoration: InputDecoration(
-                        // labelText: 'Title',
-                        // labelStyle: TextStyle(
-                        //     fontSize: 20, fontWeight: FontWeight.bold),
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      ),
-                      // onSubmitted: (_){
-                      //   FocusScope.of(context).requestFocus(descriptionNode);
-                      // },
-                    ),
                     SizedBox(height: 10),
                     Row(
                       children: <Widget>[
@@ -203,6 +272,22 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                           child: SizedBox(),
                         ),
                       ],
+                    ),
+                    CustomDivider('Add a schedule'),
+                    Container(
+                      width: double.infinity,
+                      height: 200,
+                      child: GridView(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 10),
+                        children: daysList,
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 150,
+                          childAspectRatio: 3 / 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                      ),
                     ),
                   ],
                 ),
