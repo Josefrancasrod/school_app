@@ -5,9 +5,9 @@ import '../providers/classes.dart';
 import '../widgets/classes_card.dart';
 
 class ClassesScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-
     final classes = Provider.of<Classes>(context).items;
     List<Widget> classesList = classes
             .map(
@@ -16,7 +16,6 @@ class ClassesScreen extends StatelessWidget {
             .toList();
 
     classesList.add(ClassesCard());
-
 
     return Scaffold(
       body: GridView(

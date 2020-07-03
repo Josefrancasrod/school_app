@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/custom_divider.dart';
-import '../providers/schedule.dart';
+import '../providers/classes.dart';
 
 enum ButtomType {
   start,
@@ -59,7 +59,6 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
   }
 
   void _saveSchedule(Map<String, bool> isSelected, List<TimeOfDay> time) {
-    final schedule = Provider.of<Schedule>(context, listen: false);
     Map<String, Map<String, dynamic>> newSchedule = {};
 
     for (var i = 0; i < days.length; i++) {
@@ -73,13 +72,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                 });
       }
     }
-
-    schedule.addSchedule(
-      ScheduleItem(
-        id: DateTime.now().toString(),
-        weekschedule: newSchedule,
-      ),
-    );
+    Navigator.of(context).pop(newSchedule);
   }
 
   Widget _filterChip(String text) {
@@ -218,7 +211,6 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
               child: Text('Save'),
               onPressed: () {
                 _saveSchedule(widget.isSelected, [start, finish]);
-                Navigator.of(context).pop();
               },
             ),
           )
