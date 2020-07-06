@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-
 class ClassesItem {
   String id;
   String name;
@@ -19,8 +18,14 @@ class ClassesItem {
 }
 
 class Classes with ChangeNotifier {
-  List<ClassesItem> _items = [
-    
+  List<ClassesItem> _items = [];
+  List<String> days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
   ];
 
   List<ClassesItem> get items {
@@ -45,5 +50,22 @@ class Classes with ChangeNotifier {
     );
     print(id);
     notifyListeners();
+  }
+
+  List<ClassesItem> getDaySchedule(DateTime dateTime) {
+
+    final daySchedule = _items.where((element) {
+      final listOfKey = element.schedule.keys.toList();
+      String mapDay;
+
+      listOfKey.forEach((element) {
+        if(element == days[0]){
+          mapDay = element;
+        }
+      });
+      return  mapDay == days[0];
+    });
+
+    return [...daySchedule];
   }
 }
