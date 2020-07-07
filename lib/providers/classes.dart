@@ -52,18 +52,18 @@ class Classes with ChangeNotifier {
     notifyListeners();
   }
 
-  List<ClassesItem> getDaySchedule(DateTime dateTime) {
+  List<ClassesItem> getDaySchedule(int day) {
 
     final daySchedule = _items.where((element) {
       final listOfKey = element.schedule.keys.toList();
       String mapDay;
 
       listOfKey.forEach((element) {
-        if(element == days[0]){
+        if(element == days[day]){
           mapDay = element;
         }
       });
-      return  mapDay == days[0];
+      return  mapDay == days[day];
     });
 
     return [...daySchedule];
