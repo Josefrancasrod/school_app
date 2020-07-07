@@ -26,7 +26,7 @@ class HomeworkItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
       child: Container(
         height: 80,
