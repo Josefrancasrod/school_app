@@ -18,6 +18,8 @@ class ClassesItem {
 }
 
 class Classes with ChangeNotifier {
+  double _timeOfDayToDouble(TimeOfDay timeOfDay) =>
+      timeOfDay.hour + timeOfDay.minute / 60.0;
   List<ClassesItem> _items = [];
   List<String> days = [
     'Monday',
@@ -30,6 +32,22 @@ class Classes with ChangeNotifier {
 
   List<ClassesItem> get items {
     return [..._items];
+  }
+
+  List<ClassesItem> _orderItemsByDay(int day) {
+    final daySchedule = _items.where((element) {
+      final listOfKey = element.schedule.keys.toList();
+      String mapDay;
+
+      listOfKey.forEach((element) {
+        if (element == days[day]) {
+          mapDay = element;
+        }
+      });
+      return mapDay == days[day];
+    });
+
+    return [...daySchedule];
   }
 
   void addItem({
@@ -53,19 +71,25 @@ class Classes with ChangeNotifier {
   }
 
   List<ClassesItem> getDaySchedule(int day) {
+    List<ClassesItem> daySchedule = _orderItemsByDay(day);
+    ClassesItem aux;
 
-    final daySchedule = _items.where((element) {
-      final listOfKey = element.schedule.keys.toList();
-      String mapDay;
+    for (var i = 0; i < daySchedule.length; i++) {
+      var startHour =
+          _timeOfDayToDouble(daySchedule[i].schedule[days[day]]['Start']);
 
-      listOfKey.forEach((element) {
-        if(element == days[day]){
-          mapDay = element;
+      for (var j = 0; j < daySchedule.length; j++) {
+        var nextStartHour =
+            _timeOfDayToDouble(daySchedule[j].schedule[days[day]]['Start']);
+
+        if (startHour < nextStartHour) {
+          aux = daySchedule[i];
+          daySchedule[i] = daySchedule[j];
+          daySchedule[j] = aux;
         }
-      });
-      return  mapDay == days[day];
-    });
+      }
+    }
 
-    return [...daySchedule];
+    return daySchedule;
   }
 }
