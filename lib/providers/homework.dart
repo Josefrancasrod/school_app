@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_app/widgets/homework_item.dart';
+
 
 enum HomeworkType {
   homework,
@@ -52,6 +52,16 @@ class Homework with ChangeNotifier {
 
   int get itemCount {
     return _items.length;
+  }
+
+  int numberOfHomework(String name){
+    var totalHomework = 0;
+    _items.forEach((key, value) {
+      if(value.asignature == name){
+        totalHomework++;
+      }
+    });
+    return totalHomework;
   }
 
   Map<String, HomeworkItem> get items {
