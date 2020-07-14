@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/homework.dart';
 import '../widgets/homework_item.dart' as hw;
 import '../providers/classes.dart';
+import '../widgets/classes_homework.dart';
 
 class HomeworkScreen extends StatelessWidget {
   @override
@@ -12,9 +13,8 @@ class HomeworkScreen extends StatelessWidget {
     final classes = Provider.of<Classes>(context).items;
 
     Color _getColor(String name) {
-      ClassesItem classItem = classes.firstWhere((element) => element.name == name);
-      
-
+      ClassesItem classItem =
+          classes.firstWhere((element) => element.name == name);
       return classItem.color;
     }
 
@@ -28,31 +28,23 @@ class HomeworkScreen extends StatelessWidget {
       );
     }
 
-    Widget _cardFea() {
-      return Card(
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Row(
-            children: <Widget>[
-              Text('Hello'),
-              SizedBox(width: 150),
-            ],
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
           SliverToBoxAdapter(
             child: Container(
               height: 120,
-              child: ListView(
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  //Here goes more stuff
-                ],
+                itemCount: classes.length,
+                itemBuilder: (ctx, i) => Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: ClassesHomeworkCard(
+                    classes[i].name,
+                    classes[i].color,
+                    homework.numberOfHomework(classes[i].name),
+                  ),
+                ),
               ),
             ),
           ),
@@ -72,7 +64,6 @@ class HomeworkScreen extends StatelessWidget {
                 _getColor(homework.items.values.toList()[i].asignature),
               ),
               childCount: homework.itemCount,
-              
             ),
           ),
         ],
