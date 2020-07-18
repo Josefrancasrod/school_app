@@ -47,6 +47,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         case ButtomType.start:
           setState(() {
             start = entry;
+            finish = TimeOfDay(hour: entry.hour + 1, minute: entry.minute);
           });
           break;
         case ButtomType.finish:
@@ -82,7 +83,8 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         child: Center(child: Text(text)),
       ),
       labelStyle: TextStyle(
-        color: widget.isSelected[text] ? Colors.black : Colors.black54,
+        color: widget.isSelected[text] ? Colors.white : Colors.black,
+        fontFamily: 'Montserrat',
         fontSize: 10,
       ),
       selected: widget.isSelected[text],
@@ -92,7 +94,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         });
       },
       selectedColor: Theme.of(context).accentColor,
-      checkmarkColor: Colors.black,
+      checkmarkColor: Colors.white,
     );
   }
 
@@ -122,18 +124,18 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                         Column(
                           children: <Widget>[
                             _filterChip('Monday'),
-                            _filterChip('Tuesday'),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            _filterChip('Wednesday'),
                             _filterChip('Thursday'),
                           ],
                         ),
                         Column(
                           children: <Widget>[
+                            _filterChip('Tuesday'),
                             _filterChip('Friday'),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            _filterChip('Wednesday'),
                             _filterChip('Saturday'),
                           ],
                         )
@@ -151,9 +153,11 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                           child: Text(
                             'Pick a time',
                             style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor),
+                              color: Colors.grey[700],
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w300,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                         RaisedButton(
@@ -164,7 +168,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                               ? 'Start'
                               : '${start.format(context)}'),
                           textColor: Colors.white,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).accentColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
@@ -180,7 +184,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                               ? 'Finish'
                               : '${finish.format(context)}'),
                           textColor: Colors.white,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).accentColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
@@ -192,7 +196,13 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                       controller: _classroomController,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).accentColor, width: 1.0),
+                        ),
                         border: OutlineInputBorder(),
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -204,11 +214,20 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
             ),
           ),
           Container(
-            height: 40,
+            height: 70,
             width: double.infinity,
+            padding: EdgeInsets.all(10),
             child: RaisedButton(
+              child: Text(
+                'Save',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16,
+                ),
+              ),
               color: Theme.of(context).accentColor,
-              child: Text('Save'),
               onPressed: () {
                 _saveSchedule(widget.isSelected, [start, finish]);
               },

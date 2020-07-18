@@ -4,7 +4,7 @@ class CustomDivider extends StatelessWidget {
   final text;
 
   CustomDivider(this.text);
-  
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -14,18 +14,21 @@ class CustomDivider extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor),
+              fontFamily: 'Montserrat',
+              fontSize: 16,
+              fontWeight: FontWeight.w300,
+              color: Colors.grey[700],
+            ),
           ),
         ),
         Expanded(
           child: Divider(
-            color: Theme.of(context).primaryColor,
+            color: Colors.grey[700],
             thickness: 1,
           ),
         ),
       ],
-    );;
+    );
+    ;
   }
 }

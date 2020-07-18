@@ -34,16 +34,19 @@ class _TabsScreenState extends State<TabsScreen> {
   }
 
   Color _selectedOption(int index) {
-    return index == _selectedPageIndex ? Colors.blueAccent : Colors.grey;
+    return index == _selectedPageIndex ? Theme.of(context).accentColor : Colors.grey;
   }
 
   Widget _bottomButtonsCreation(
       Color color, Function function, IconData icon, int index) {
-    return FlatButton(
-      onPressed: function,
-      child: Icon(
-        icon,
-        color: color,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: IconButton(
+        onPressed: function,
+        icon: Icon(
+          icon,
+          color: color,
+        ),
       ),
     );
   }
@@ -51,19 +54,26 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          _pages[_selectedPageIndex]['title'],
-          style: TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.add, color: Colors.black,),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   title: Text(
+      //     _pages[_selectedPageIndex]['title'],
+      //     style: TextStyle(
+      //       fontWeight: FontWeight.w300,
+      //       color: Colors.black,
+      //       fontFamily: 'Montserrat',
+      //     ),
+      //   ),
+      //   actions: <Widget>[
+      //     IconButton(
+      //       onPressed: () {},
+      //       icon: Icon(
+      //         Icons.add,
+      //         color: Colors.black,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       body: _pages[_selectedPageIndex]['page'],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -74,7 +84,7 @@ class _TabsScreenState extends State<TabsScreen> {
           Icons.add,
           color: Colors.white,
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Theme.of(context).accentColor,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -95,6 +105,7 @@ class _TabsScreenState extends State<TabsScreen> {
                 Icons.calendar_today,
                 _selectedPageIndex,
               ),
+              
             ],
           ),
         ),
