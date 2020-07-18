@@ -200,7 +200,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Class'),
+        title: Text('New Class', style: Theme.of(context).textTheme.headline6,),
       ),
       body: Column(
         children: <Widget>[
@@ -221,6 +221,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                         // labelText: 'Title',
                         // labelStyle: TextStyle(
                         //     fontSize: 20, fontWeight: FontWeight.bold),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).accentColor, width: 1.0),
+                        ),
                         border: OutlineInputBorder(),
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -237,6 +241,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                         // labelText: 'Title',
                         // labelStyle: TextStyle(
                         //     fontSize: 20, fontWeight: FontWeight.bold),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).accentColor, width: 1.0),
+                        ),
                         border: OutlineInputBorder(),
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -254,9 +262,11 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                           child: Text(
                             'Class Color',
                             style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor),
+                              fontFamily: 'Montserrat',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.grey[700],
+                            ),
                           ),
                         ),
                         RaisedButton(
@@ -295,10 +305,19 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
             ),
           ),
           Container(
-            height: 40,
+            height: 70,
             width: double.infinity,
+            padding: EdgeInsets.all(10),
             child: RaisedButton(
-              child: Text('Save'),
+              child: Text(
+                'Save',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16,
+                ),
+              ),
               color: Theme.of(context).accentColor,
               onPressed: _addClasses,
             ),

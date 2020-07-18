@@ -14,18 +14,15 @@ class NewHomeworkScreen extends StatefulWidget {
 }
 
 class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
-
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  
+
   String _classValue;
   bool tapOnClass = false;
   HomeworkType _type = HomeworkType.homework;
   DateTime _selectedDate;
   FocusNode titleNode;
   FocusNode descriptionNode;
-  
-
 
   List<String> listOfClasses = [];
 
@@ -59,6 +56,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
         },
       ),
       onTap: () {
+        _unSelectClass(false);
         setState(() {
           _type = recivedValue;
         });
@@ -67,6 +65,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   }
 
   void _presentDatePicker() {
+    _unSelectClass(false);
     _unFocusNode();
     showDatePicker(
       context: context,
@@ -84,8 +83,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
     });
   }
 
-  void _addHomework(){
-
+  void _addHomework() {
     Provider.of<Homework>(context, listen: false).addItem(
       id: DateTime.now().toString(),
       title: titleController.text,
@@ -95,31 +93,37 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
       type: _type,
     );
     Navigator.of(context).pop();
-    
   }
 
-  void _unFocusNode(){
+  void _unFocusNode() {
     FocusScope.of(context).unfocus();
+  }
+
+  void _unSelectClass(bool isSelected){
+    setState(() {
+      tapOnClass = isSelected;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    listOfClasses = Provider.of<Classes>(context, listen: false)
+        .items
+        .map((item) => item.name)
+        .toList();
 
-    listOfClasses = Provider.of<Classes>(context, listen: false).items.map((item) => item.name).toList();
-    
-    if(!tapOnClass){
+    if (!tapOnClass && _classValue == null) {
       setState(() {
         _classValue = listOfClasses[0];
       });
     }
-    
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
           'New Homework',
-          style: TextStyle(fontWeight: FontWeight.w300),
+          style: Theme.of(context).textTheme.headline6,
         ),
       ),
       body: Column(
@@ -142,11 +146,19 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                         // labelText: 'Title',
                         // labelStyle: TextStyle(
                         //     fontSize: 20, fontWeight: FontWeight.bold),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).accentColor, width: 1.0),
+                        ),
                         border: OutlineInputBorder(),
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       ),
-                      onSubmitted: (_){
+                      onTap: (){
+                        _unSelectClass(false);
+                      },
+                        
+                      onSubmitted: (_) {
                         FocusScope.of(context).requestFocus(descriptionNode);
                       },
                     ),
@@ -155,25 +167,37 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                       focusNode: descriptionNode,
                       controller: descriptionController,
                       maxLines: 5,
+                      onTap: (){
+                         _unSelectClass(false);
+                      },
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).accentColor, width: 1.0),
+                        ),
                         border: OutlineInputBorder(),
                         contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      ), 
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      ),
                     ),
                     CustomDivider('Class'),
                     Container(
                       decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.grey,
+                            color: tapOnClass
+                                ? Theme.of(context).accentColor
+                                : Colors.grey[800],
                             width: 1,
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: DropdownButton<String>(
                         value: _classValue,
-                        items: listOfClasses.map<DropdownMenuItem<String>>((String value) {
+                        items: listOfClasses
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Padding(
@@ -182,14 +206,14 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                             ),
                           );
                         }).toList(),
-                        onTap: (){
+                        onTap: () {
                           _unFocusNode();
-                          tapOnClass = true;
+                          _unSelectClass(true);
                         },
                         onChanged: (value) {
-                          
                           setState(() {
                             _classValue = value;
+                            tapOnClass = true;
                           });
                         },
                         isExpanded: true,
@@ -205,9 +229,11 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                           child: Text(
                             'Due Date',
                             style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor),
+                              fontFamily: 'Montserrat',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.grey[700],
+                            ),
                           ),
                         ),
                         RaisedButton(
@@ -215,7 +241,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                           child: Text(_selectedDate != null
                               ? DateFormat.yMMMMEEEEd().format(_selectedDate)
                               : 'Pick a Date'),
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).accentColor,
                           textColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
@@ -238,10 +264,19 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
             ),
           ),
           Container(
-            height: 40,
+            height: 70,
             width: double.infinity,
+            padding: EdgeInsets.all(10),
             child: RaisedButton(
-              child: Text('Save'),
+              child: Text(
+                'Save',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16,
+                ),
+              ),
               color: Theme.of(context).accentColor,
               onPressed: _addHomework,
             ),

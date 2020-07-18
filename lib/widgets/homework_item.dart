@@ -10,73 +10,104 @@ class HomeworkItem extends StatelessWidget {
 
   HomeworkItem(this.homeworkItem, this.color);
 
-  String _getType(homework.HomeworkType type){
+  String _getType(homework.HomeworkType type) {
     var stringType = '';
-    
-    switch(type){
-      case homework.HomeworkType.homework: stringType = "Homework"; break;
-      case homework.HomeworkType.test: stringType = "Test"; break;
-      case homework.HomeworkType.proyect: stringType = "Proyect"; break;
-    }
-    
-    return stringType;
-  
-  }
 
+    switch (type) {
+      case homework.HomeworkType.homework:
+        stringType = "Homework";
+        break;
+      case homework.HomeworkType.test:
+        stringType = "Test";
+        break;
+      case homework.HomeworkType.proyect:
+        stringType = "Proyect";
+        break;
+    }
+
+    return stringType;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       child: Container(
-        height: 80,
+        height: 110,
         child: Card(
-          clipBehavior: Clip.hardEdge,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                height: 100,
-                width: 5,
-                decoration: BoxDecoration(
-                  color: color,
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        homeworkItem.title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          homeworkItem.title,
+                          style: TextStyle(
+                              color: color,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900),
                         ),
-                      ),
-                      Text(homeworkItem.asignature),
-                      Text('Type: ${_getType(homeworkItem.type)}'),
-                    ],
-                  ),
+                        Text(
+                          homeworkItem.description.length > 35
+                              ? '${homeworkItem.description.substring(0, 35)} ...'
+                              : homeworkItem.description,
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    CircleAvatar(
+                      backgroundColor: color,
+                      radius: 10,
+                    )
+                  ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Icon(
-                      Icons.date_range,
-                      size: 18,
-                      color: Theme.of(context).primaryColor,
+                    Expanded(
+                      child: Text(
+                        '${_getType(homeworkItem.type)}',
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
-                    SizedBox(width: 5),
-                    Text(DateFormat.yMMMMd().format(homeworkItem.dueDate)),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.date_range,
+                          size: 20,
+                          color: color,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          DateFormat.MMMMd().format(homeworkItem.dueDate),
+                          style: TextStyle(
+                              color: color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w300),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

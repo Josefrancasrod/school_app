@@ -16,6 +16,29 @@ class ScheduleScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
+          SliverAppBar(
+            title: Text(
+              'My Schedule',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+            iconTheme: IconThemeData(color: Colors.black),
+            backgroundColor: Colors.grey[200],
+            flexibleSpace: FlexibleSpaceBar(
+              background: Padding(
+                padding: const EdgeInsets.only(
+                  top: 90,
+                  bottom: 15,
+                ),
+                child: Container(
+                  height: 100,
+                  child: null, //NEW WIDGET PENDING
+                ),
+              ),
+            ),
+            floating: true,
+            expandedHeight: 200,
+          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(10.0),

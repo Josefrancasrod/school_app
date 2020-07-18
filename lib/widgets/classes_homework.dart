@@ -22,41 +22,34 @@ class ClassesHomeworkCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              className,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+            CircleAvatar(
+              backgroundColor: classColor,
+              radius: 10,
             ),
             SizedBox(
               height: 5,
             ),
-            Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        numberOfHomework > 0 ? '$numberOfHomework': 'No',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                      Text(
-                        numberOfHomework != 1 ?  'Tasks': 'Task',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ],
-                  )
-                
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  numberOfHomework > 0 ? '$numberOfHomework ' : 'No ',
+                  style: TextStyle(fontFamily: 'Montserrat',fontSize: 20, color: Colors.black),
+                ),
+                Text(
+                  numberOfHomework != 1 ? 'Tasks' : 'Task',
+                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 20, color: Colors.black),
+                ),
+              ],
+            ),
+            Text(
+              className,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
           ],
         ),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              classColor.withOpacity(0.7),
-              classColor,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
       ),

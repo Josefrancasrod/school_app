@@ -31,8 +31,32 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primaryColor: Colors.blue[900],
-          accentColor: Colors.blueAccent,
+          textTheme: TextTheme(
+            bodyText1: TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+            bodyText2: TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 15,
+              fontWeight: FontWeight.w300,
+              color: Colors.black,
+            ),
+            headline6: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w300,
+              color: Colors.black,
+            ),
+            subtitle1: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          primaryColor: Colors.grey[200],
+          accentColor: Colors.blueAccent[400],
+          
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: TabsScreen(),
