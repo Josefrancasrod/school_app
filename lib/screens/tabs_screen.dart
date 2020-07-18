@@ -34,7 +34,7 @@ class _TabsScreenState extends State<TabsScreen> {
   }
 
   Color _selectedOption(int index) {
-    return index == _selectedPageIndex ? Colors.white : Colors.blueAccent;
+    return index == _selectedPageIndex ? Colors.blueAccent : Colors.grey;
   }
 
   Widget _bottomButtonsCreation(
@@ -52,13 +52,17 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Center(
-          child: Text(
-            _pages[_selectedPageIndex]['title'],
-            style: TextStyle(fontWeight: FontWeight.w300),
-          ),
+        backgroundColor: Colors.white,
+        title: Text(
+          _pages[_selectedPageIndex]['title'],
+          style: TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
         ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.add, color: Colors.black,),
+          ),
+        ],
       ),
       body: _pages[_selectedPageIndex]['page'],
       floatingActionButton: FloatingActionButton(
@@ -66,52 +70,31 @@ class _TabsScreenState extends State<TabsScreen> {
           Navigator.of(context).pushNamed(NewHomeworkScreen.routeName);
           //Add a new[Homework, Class, ]
         },
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.blueAccent,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).primaryColor,
-        notchMargin: 10,
         shape: CircularNotchedRectangle(),
         child: Container(
-          height: 60,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  _bottomButtonsCreation(
-                    _selectedOption(0),
-                    () => _selectPage(0),
-                    Icons.assignment,
-                    _selectedPageIndex,
-                  ),
-                  _bottomButtonsCreation(
-                    _selectedOption(1),
-                    () => _selectPage(1),
-                    Icons.school,
-                    _selectedPageIndex,
-                  ),
-                ],
+              _bottomButtonsCreation(
+                _selectedOption(0),
+                () => _selectPage(0),
+                Icons.assignment,
+                _selectedPageIndex,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  _bottomButtonsCreation(
-                    _selectedOption(2),
-                    () => _selectPage(2),
-                    Icons.calendar_today,
-                    _selectedPageIndex,
-                  ),
-                  _bottomButtonsCreation(
-                    _selectedOption(3), //Add a new Screen of user
-                    () => _selectPage(3),
-                    Icons.person,
-                    _selectedPageIndex,
-                  ),
-                ],
-              )
+              _bottomButtonsCreation(
+                _selectedOption(2),
+                () => _selectPage(2),
+                Icons.calendar_today,
+                _selectedPageIndex,
+              ),
             ],
           ),
         ),
