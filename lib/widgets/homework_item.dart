@@ -51,17 +51,19 @@ class HomeworkItem extends StatelessWidget {
                         Text(
                           homeworkItem.title,
                           style: TextStyle(
-                              color: color,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900),
+                            color: color,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         Text(
                           homeworkItem.description.length > 35
                               ? '${homeworkItem.description.substring(0, 35)} ...'
                               : homeworkItem.description,
                           style: TextStyle(
-                            color: Colors.grey[700],
-                            fontSize: 14,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black54,
                           ),
                         ),
                       ],
