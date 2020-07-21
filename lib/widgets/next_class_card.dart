@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class NextClassCard extends StatelessWidget {
 
   final String className;
-  final String duration;
+  final String start;
+  final String finish;
   final String room;
   final Color color;
 
-  NextClassCard(this.className, this.color, this.duration, this.room);
+  NextClassCard(this.className, this.color, this.start, this.finish, this.room);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,7 @@ class NextClassCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       Text(
-                        duration,
+                        '$start - $finish',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
