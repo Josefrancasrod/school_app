@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/next_class_card.dart';
+import '../widgets/no_more_card.dart';
 import '../widgets/schedule_card.dart';
 import '../providers/classes.dart';
 
@@ -13,7 +14,7 @@ class ScheduleScreen extends StatelessWidget {
     final classProvider = Provider.of<Classes>(context, listen: false);
     final classes = classProvider.getDaySchedule(day);
     final days = classProvider.days;
-    //final nextClass = classProvider.getNextClass(days[day]);
+    final nextClass = classProvider.getNextClass(days[day]);
 
     return Scaffold(
       body: CustomScrollView(
@@ -32,16 +33,20 @@ class ScheduleScreen extends StatelessWidget {
                   top: 90,
                   bottom: 15,
                 ),
-                child: NextClassCard(
-                  'Spanish',
-                  Colors.purple,
-                  '10:00 PM',
-                  'SC11',
-                ),
+                child: nextClass != null
+                    ? NextClassCard(
+                        nextClass.name,
+                        nextClass.color,
+                        nextClass.schedule[days[day]]['Start'].format(context),
+                        nextClass.schedule[days[day]]['Finish'].format(context),
+                        nextClass.schedule[days[day]]['Classroom'],
+                      )
+                    : null,
               ),
             ),
             floating: true,
-            expandedHeight: 200,
+            expandedHeight:
+                 nextClass != null ? 200 : 50,
           ),
           SliverToBoxAdapter(
             child: Padding(

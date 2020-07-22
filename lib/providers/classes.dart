@@ -93,5 +93,18 @@ class Classes with ChangeNotifier {
     return daySchedule;
   }
 
-  
+  ClassesItem getNextClass(String day) {
+    ClassesItem nextClass;
+    List<ClassesItem> daySchedule = getDaySchedule(DateTime.now().weekday - 1);
+    try{
+      nextClass = daySchedule.firstWhere(
+        (element) =>
+            _timeOfDayToDouble(element.schedule[day]['Start']) >
+            _timeOfDayToDouble(TimeOfDay.now()),
+      );
+    } catch(e){
+      nextClass = null;
+    }
+    return nextClass;
+  }
 }
