@@ -28,6 +28,7 @@ class Classes with ChangeNotifier {
     'Thursday',
     'Friday',
     'Saturday',
+    'Sunday'
   ];
 
   List<ClassesItem> get items {

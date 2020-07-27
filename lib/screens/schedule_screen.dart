@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../widgets/next_class_card.dart';
 import '../widgets/no_more_card.dart';
+import '../widgets/bottom_sheet_menu.dart';
 import '../widgets/schedule_card.dart';
 import '../providers/classes.dart';
 
@@ -24,7 +25,12 @@ class ScheduleScreen extends StatelessWidget {
               'My Schedule',
               style: Theme.of(context).textTheme.headline6,
             ),
-            leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+            leading: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                BottomSheetMenu.modal(context);
+              },
+            ),
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.grey[200],
             flexibleSpace: FlexibleSpaceBar(

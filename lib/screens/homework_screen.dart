@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:school_app/screens/new_classes_screen.dart';
 
+import '../widgets/bottom_sheet_menu.dart';
 import '../providers/homework.dart';
 import '../widgets/homework_item.dart' as hw;
 import '../providers/classes.dart';
@@ -28,8 +28,8 @@ class HomeworkScreen extends StatelessWidget {
         ),
       );
     }
-    
-    void _modal() {
+
+    void modal() {
       showModalBottomSheet(
         context: context,
         enableDrag: true,
@@ -38,20 +38,12 @@ class HomeworkScreen extends StatelessWidget {
             top: Radius.circular(30),
           ),
         ),
-        builder: (ctx) => Column(
+        builder: (ctx) => Wrap(
           children: <Widget>[
-            //ONLY FOR TEST, DELETE
-            Padding(
+            Container(
+              // height: 275,
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, NewClassesScreen.routeName);
-                },
-                icon: Icon(
-                  Icons.school,
-                  color: Colors.grey,
-                ),
-              ),
+              child: BottomSheetMenu(),
             ),
           ],
         ),
@@ -66,7 +58,12 @@ class HomeworkScreen extends StatelessWidget {
               'My Homework',
               style: Theme.of(context).textTheme.headline6,
             ),
-            leading: IconButton(icon: Icon(Icons.menu), onPressed: _modal),
+            leading: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                BottomSheetMenu.modal(context);
+              },
+            ),
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.grey[200],
             flexibleSpace: FlexibleSpaceBar(
@@ -94,7 +91,8 @@ class HomeworkScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
               child: Text(
                 'Assigments',
                 style: Theme.of(context).textTheme.headline6,
