@@ -53,7 +53,7 @@ class NextClassCard extends StatelessWidget {
                   ),
                   CircleAvatar(
                     radius: 10,
-                    backgroundColor: Colors.red, //HERE GOES THE CLASS COLOR
+                    backgroundColor: color
                   ),
                 ],
               ),

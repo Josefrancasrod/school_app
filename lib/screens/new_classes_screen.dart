@@ -133,27 +133,37 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       splashColor: classColor,
       borderRadius: BorderRadius.circular(15),
       child: Container(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(10),
         child: haveDay
             ? Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
                     dia,
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                        color: classColor),
                   ),
-                  Text(
-                    '${hour['Start'].format(context)} - ${hour['Finish'].format(context)}',
-                    style: TextStyle(fontSize: 10, color: Colors.white),
-                  ),
-                  Text(
-                    '${hour['Classroom']}',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  Column(
+                    children: <Widget>[
+                      Text(
+                        '${hour['Classroom']}',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          // color: Theme.of(context).primaryColor
+                        ),
+                      ),
+                      Text(
+                        '${hour['Start'].format(context)} - ${hour['Finish'].format(context)}',
+                        style: TextStyle(
+                          fontSize: 10,
+                          // color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               )
@@ -164,15 +174,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
               )),
         decoration: haveDay
             ? BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    classColor.withOpacity(0.7),
-                    classColor,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
+                border:
+                    Border.all(width: 1, color: Theme.of(context).accentColor),
               )
             : BoxDecoration(
                 color: Colors.white,
@@ -200,7 +205,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Class', style: Theme.of(context).textTheme.headline6,),
+        title: Text(
+          'New Class',
+          style: Theme.of(context).textTheme.headline6,
+        ),
       ),
       body: Column(
         children: <Widget>[
@@ -294,8 +302,8 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 150,
                           childAspectRatio: 3 / 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
                         ),
                       ),
                     ),
