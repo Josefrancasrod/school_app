@@ -12,7 +12,7 @@ class ScheduleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final day = DateTime.now().weekday - 1;
 
-    final classProvider = Provider.of<Classes>(context, listen: false);
+    final classProvider = Provider.of<Classes>(context);
     final classes = classProvider.getDaySchedule(day);
     final days = classProvider.days;
     final nextClass = classProvider.getNextClass(days[day]);
