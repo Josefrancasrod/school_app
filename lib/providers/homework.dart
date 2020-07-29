@@ -50,6 +50,11 @@ class Homework with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteItem(String id){
+    _items.removeWhere((key, value) => value.id == id);
+    notifyListeners();
+  }
+
   int get itemCount {
     return _items.length;
   }
