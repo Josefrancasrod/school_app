@@ -15,7 +15,10 @@ class ClassesCard extends StatelessWidget {
     @required BuildContext ctx,
   }) {
     if (!containsData) {
-      Navigator.of(ctx).pushNamed(ClassesDetailScreen.routeName);
+      Navigator.of(ctx).pushNamed(
+        ClassesDetailScreen.routeName,
+        arguments: classesItem,
+      );
     } else {
       Navigator.of(ctx).pushNamed(NewClassesScreen.routeName);
     }
@@ -38,12 +41,32 @@ class ClassesCard extends StatelessWidget {
                   color: Colors.grey,
                 ),
               )
-            : Text(
-                classesItem.name,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: CircleAvatar(
+                      backgroundColor: classesItem.color,
+                      maxRadius: 15,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: FittedBox(
+                      child: Text(
+                        classesItem.name,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
         decoration: containsData
             ? BoxDecoration(
@@ -55,7 +78,11 @@ class ClassesCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               )
             : BoxDecoration(
-                color: classesItem.color,
+                color: Colors.white,
+                border: Border.all(
+                  color: Theme.of(ctx).accentColor,
+                  width: 1,
+                ),
                 borderRadius: BorderRadius.circular(15),
               ),
       ),
@@ -66,6 +93,5 @@ class ClassesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool containsItems = classesItem == null;
     return _classesCard(containsItems, context);
-
   }
 }

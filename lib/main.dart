@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
+import './screens/classes_screen.dart';
 import './screens/add_schedule_screen.dart';
 import './screens/new_homework_screen.dart';
 import './screens/tabs_screen.dart';
@@ -56,7 +56,6 @@ class MyApp extends StatelessWidget {
           ),
           primaryColor: Colors.grey[200],
           accentColor: Colors.blueAccent[400],
-          
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: TabsScreen(),
@@ -65,6 +64,7 @@ class MyApp extends StatelessWidget {
           NewClassesScreen.routeName: (ctx) => NewClassesScreen(),
           ClassesDetailScreen.routeName: (ctx) => ClassesDetailScreen(),
           AddScheduleScreen.routeName: (ctx) => AddScheduleScreen(),
+          ClassesScreen.routeName: (ctx) => ClassesScreen(),
         },
       ),
     );

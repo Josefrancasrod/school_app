@@ -5,7 +5,7 @@ import '../providers/classes.dart';
 import '../widgets/classes_card.dart';
 
 class ClassesScreen extends StatelessWidget {
-
+  static const routeName = "/classes-screen";
   @override
   Widget build(BuildContext context) {
     final classes = Provider.of<Classes>(context).items;
@@ -18,6 +18,7 @@ class ClassesScreen extends StatelessWidget {
     classesList.add(ClassesCard());
 
     return Scaffold(
+      appBar: AppBar(title: Text('My Classes'),),
       body: GridView(
         padding: const EdgeInsets.all(10),
         children: classesList,

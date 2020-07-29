@@ -55,6 +55,11 @@ class Homework with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteByClassName(String name){
+    _items.removeWhere((key, value) => value.asignature == name);
+    notifyListeners();
+  }
+
   int get itemCount {
     return _items.length;
   }
