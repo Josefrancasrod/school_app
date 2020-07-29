@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/classes_screen.dart';
 import '../screens/new_classes_screen.dart';
 import '../screens/new_homework_screen.dart';
 
@@ -74,7 +75,7 @@ class BottomSheetMenu extends StatelessWidget {
           Container(
             width: double.infinity,
             child: ListTile(
-              onTap: () {},
+              // onTap: () {},
               contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 1),
               leading: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
@@ -107,12 +108,19 @@ class BottomSheetMenu extends StatelessWidget {
               Divider(),
               _optionButton(
                 Icons.school,
+                'My classes',
+                () {
+                  Navigator.of(context).pushNamed(ClassesScreen.routeName);
+                },
+              ),
+              Divider(),
+              _optionButton(
+                Icons.school,
                 'Add a new class',
                 () {
                   Navigator.of(context).pushNamed(NewClassesScreen.routeName);
                 },
               ),
-              Divider(),
               _optionButton(
                 Icons.assignment,
                 'New assigment',

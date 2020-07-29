@@ -71,6 +71,11 @@ class Classes with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteItem(String id){
+    _items.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
+
   List<ClassesItem> getDaySchedule(int day) {
     List<ClassesItem> daySchedule = _orderItemsByDay(day);
     ClassesItem aux;

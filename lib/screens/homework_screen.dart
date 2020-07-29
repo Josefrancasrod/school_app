@@ -103,9 +103,80 @@ class HomeworkScreen extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (ctx, i) => Column(
                 children: <Widget>[
-                  hw.HomeworkItem(
-                    homework.items.values.toList()[i],
-                    _getColor(homework.items.values.toList()[i].asignature),
+                  Dismissible(
+                    key: Key(homework.items.values.toList()[i].id),
+                    background: Container(
+                      color: Theme.of(context).accentColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Icon(Icons.edit, color: Colors.white),
+                            Text(
+                              'Edit',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    secondaryBackground: Container(
+                      color: Colors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Icon(Icons.delete, color: Colors.white),
+                            Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    onDismissed: (direction) {
+                      if (direction == DismissDirection.endToStart) {
+                        homework.deleteItem(
+                          homework.items.values.toList()[i].id,
+                        );
+                        Scaffold.of(context).showSnackBar(
+                          //TRY TO ADD THE UNDO BUTTON
+                          SnackBar(
+                            content: Text('Deleted'),
+                          ),
+                        );
+                      }
+                    },
+                    confirmDismiss: (direction) async {
+                      var isDismiss = false;
+                      if (direction == DismissDirection.endToStart) {
+                        await showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: Text('Are you sure?'),
+                            actions: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  isDismiss = true;
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              )
+                            ],
+                          ),
+                        );
+                        return isDismiss;
+                      } else {
+                        return isDismiss;
+                      }
+                    },
+                    child: hw.HomeworkItem(
+                      homework.items.values.toList()[i],
+                      _getColor(homework.items.values.toList()[i].asignature),
+                    ),
                   ),
                 ],
               ),

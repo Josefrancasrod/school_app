@@ -11,6 +11,13 @@ enum ButtomType {
 
 class AddScheduleScreen extends StatefulWidget {
   static const routeName = '/add-schedule-screen';
+
+  @override
+  _AddScheduleScreenState createState() => _AddScheduleScreenState();
+}
+
+class _AddScheduleScreenState extends State<AddScheduleScreen> {
+  final _classroomController = TextEditingController();
   Map<String, bool> isSelected = {
     'Monday': false,
     'Tuesday': false,
@@ -19,13 +26,6 @@ class AddScheduleScreen extends StatefulWidget {
     'Friday': false,
     'Saturday': false,
   };
-
-  @override
-  _AddScheduleScreenState createState() => _AddScheduleScreenState();
-}
-
-class _AddScheduleScreenState extends State<AddScheduleScreen> {
-  final _classroomController = TextEditingController();
 
   TimeOfDay start, finish, entry;
   List<String> days = [
@@ -83,14 +83,14 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         child: Center(child: Text(text)),
       ),
       labelStyle: TextStyle(
-        color: widget.isSelected[text] ? Colors.white : Colors.black,
+        color: isSelected[text] ? Colors.white : Colors.black,
         fontFamily: 'Montserrat',
         fontSize: 10,
       ),
-      selected: widget.isSelected[text],
+      selected: isSelected[text],
       onSelected: (bool selected) {
         setState(() {
-          widget.isSelected[text] = !widget.isSelected[text];
+          isSelected[text] = !isSelected[text];
         });
       },
       selectedColor: Theme.of(context).accentColor,
@@ -229,7 +229,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
               ),
               color: Theme.of(context).accentColor,
               onPressed: () {
-                _saveSchedule(widget.isSelected, [start, finish]);
+                _saveSchedule(isSelected, [start, finish]);
               },
             ),
           )
