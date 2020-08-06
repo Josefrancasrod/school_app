@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 enum HomeworkType {
   homework,
   proyect,
@@ -36,26 +35,41 @@ class Homework with ChangeNotifier {
     DateTime date,
     HomeworkType type,
   }) {
-    _items.putIfAbsent(
-      id,
-      () => HomeworkItem(
-        id: DateTime.now().toString(),
-        title: title,
-        description: description,
-        asignature: selectedClass,
-        dueDate: date,
-        type: type,
-      ),
-    );
+    if (_items.containsKey(id)) {
+      _items.update(
+        id,
+        (value) => HomeworkItem(
+          id: id,
+          title: title,
+          description: description,
+          asignature: selectedClass,
+          dueDate: date,
+          type: type,
+        ),
+      );
+    }else{
+      _items.putIfAbsent(
+        id,
+        () => HomeworkItem(
+          id: id,
+          title: title,
+          description: description,
+          asignature: selectedClass,
+          dueDate: date,
+          type: type,
+        ),
+      );
+
+    }
     notifyListeners();
   }
 
-  void deleteItem(String id){
+  void deleteItem(String id) {
     _items.removeWhere((key, value) => value.id == id);
     notifyListeners();
   }
 
-  void deleteByClassName(String name){
+  void deleteByClassName(String name) {
     _items.removeWhere((key, value) => value.asignature == name);
     notifyListeners();
   }
@@ -64,10 +78,10 @@ class Homework with ChangeNotifier {
     return _items.length;
   }
 
-  int numberOfHomework(String name){
+  int numberOfHomework(String name) {
     var totalHomework = 0;
     _items.forEach((key, value) {
-      if(value.asignature == name){
+      if (value.asignature == name) {
         totalHomework++;
       }
     });
@@ -77,5 +91,4 @@ class Homework with ChangeNotifier {
   Map<String, HomeworkItem> get items {
     return {..._items};
   }
-
 }

@@ -19,10 +19,18 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
 
   String _classValue;
   bool tapOnClass = false;
+  Map<String, dynamic> _initValue = {
+    'id': null,
+    'title': '',
+    'description': '',
+    'dueDate': null,
+    'type': null,
+  };
   HomeworkType _type = HomeworkType.homework;
   DateTime _selectedDate;
   FocusNode titleNode;
   FocusNode descriptionNode;
+  var _isInit = true;
 
   List<String> listOfClasses = [];
 
@@ -32,6 +40,33 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
 
     titleNode = FocusNode();
     descriptionNode = FocusNode();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+
+    if (_isInit) {
+      final _item = ModalRoute.of(context).settings.arguments as HomeworkItem;
+
+      if (_item != null) {
+        _initValue = {
+          'id': _item.id,
+          'title': _item.title,
+          'description': _item.description,
+          'dueDate': _item.dueDate,
+          'type': _item.type,
+          'assignature': _item.asignature,
+        };
+        titleController.text = _initValue['title'];
+        descriptionController.text = _initValue['description'];
+        _classValue = _initValue['assignature'];
+        _selectedDate = _initValue['dueDate'];
+        _type = _initValue['type'];
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -85,7 +120,9 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
 
   void _addHomework() {
     Provider.of<Homework>(context, listen: false).addItem(
-      id: DateTime.now().toString(),
+      id: _initValue['id'] != null
+          ? _initValue['id']
+          : DateTime.now().toString(),
       title: titleController.text,
       description: descriptionController.text,
       selectedClass: _classValue,
@@ -99,7 +136,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  void _unSelectClass(bool isSelected){
+  void _unSelectClass(bool isSelected) {
     setState(() {
       tapOnClass = isSelected;
     });
@@ -146,6 +183,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                         // labelText: 'Title',
                         // labelStyle: TextStyle(
                         //     fontSize: 20, fontWeight: FontWeight.bold),
+
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: Theme.of(context).accentColor, width: 1.0),
@@ -154,10 +192,9 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       ),
-                      onTap: (){
+                      onTap: () {
                         _unSelectClass(false);
                       },
-                        
                       onSubmitted: (_) {
                         FocusScope.of(context).requestFocus(descriptionNode);
                       },
@@ -167,8 +204,8 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                       focusNode: descriptionNode,
                       controller: descriptionController,
                       maxLines: 5,
-                      onTap: (){
-                         _unSelectClass(false);
+                      onTap: () {
+                        _unSelectClass(false);
                       },
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
