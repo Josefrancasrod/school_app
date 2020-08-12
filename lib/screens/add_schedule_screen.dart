@@ -65,12 +65,13 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     for (var i = 0; i < days.length; i++) {
       if (isSelected[days[i]]) {
         newSchedule.putIfAbsent(
-            days[i],
-            () => {
-                  'Start': time[0],
-                  'Finish': time[1],
-                  'Classroom': _classroomController.text,
-                });
+          days[i],
+          () => {
+            'Start': time[0],
+            'Finish': time[1],
+            'Classroom': _classroomController.text,
+          },
+        );
       }
     }
     Navigator.of(context).pop(newSchedule);

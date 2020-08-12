@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_app/widgets/homework_item.dart';
 
 enum HomeworkType {
   homework,
@@ -47,7 +48,7 @@ class Homework with ChangeNotifier {
           type: type,
         ),
       );
-    }else{
+    } else {
       _items.putIfAbsent(
         id,
         () => HomeworkItem(
@@ -59,7 +60,6 @@ class Homework with ChangeNotifier {
           type: type,
         ),
       );
-
     }
     notifyListeners();
   }
@@ -72,6 +72,29 @@ class Homework with ChangeNotifier {
   void deleteByClassName(String name) {
     _items.removeWhere((key, value) => value.asignature == name);
     notifyListeners();
+  }
+
+  void editClassName(String oldName, String newName) {
+    var selectedKey;
+    _items.forEach((key, value) {
+      if (value.asignature == oldName) {
+        selectedKey = key;
+        return;
+      }
+    });
+    if (selectedKey != null) {
+      _items.update(
+        selectedKey,
+        (value) => HomeworkItem(
+          asignature: newName,
+          dueDate: value.dueDate,
+          description: value.description,
+          id: value.id,
+          title: value.title,
+          type: value.type,
+        ),
+      );
+    }
   }
 
   int get itemCount {

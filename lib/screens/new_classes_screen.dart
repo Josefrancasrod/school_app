@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/homework.dart';
 import '../widgets/custom_divider.dart';
 import '../providers/classes.dart';
 import '../screens/add_schedule_screen.dart';
@@ -16,12 +17,21 @@ class NewClassesScreen extends StatefulWidget {
 class _NewClassesScreenState extends State<NewClassesScreen> {
   final _classController = TextEditingController();
   final _teacherController = TextEditingController();
-  final _classroomController = TextEditingController();
+  // final _classroomController = TextEditingController();
   Map<String, Map<String, dynamic>> newSchedule;
+  Map<String, dynamic> _initValue = {
+    'id': null,
+    'name': '',
+    'teacher': null,
+    'color': null,
+    'schedule': null,
+  };
 
   FocusNode _classNode;
   FocusNode _teacherNode;
   FocusNode _classroomNode;
+  String _oldName;
+  var _isInit = true;
 
   Color classColor = Colors.red;
 
@@ -39,6 +49,33 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     _classNode = FocusNode();
     _teacherNode = FocusNode();
     _classroomNode = FocusNode();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+
+    if (_isInit) {
+      final _item = ModalRoute.of(context).settings.arguments as ClassesItem;
+
+      if (_item != null) {
+        _initValue = {
+          'id': _item.id,
+          'name': _item.name,
+          'teacher': _item.teacherName,
+          'color': _item.color,
+          'schedule': _item.schedule,
+        };
+        _oldName = _initValue['name'];
+        _classController.text = _initValue['name'];
+        _teacherController.text = _initValue['teacher'];
+        classColor = _initValue['color'];
+        newSchedule = _initValue['schedule'];
+      }
+    }
+    _isInit = false;
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -102,12 +139,20 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
   void _addClasses() {
     Provider.of<Classes>(context, listen: false).addItem(
-      id: DateTime.now().toString(),
+      id: _initValue['id'] != null
+          ? _initValue['id']
+          : DateTime.now().toString(),
       name: _classController.text,
       teacherName: _teacherController.text,
       scheduleItem: newSchedule,
       color: classColor,
     );
+    if (_oldName != null) {
+      Provider.of<Homework>(context, listen: false).editClassName(
+        _oldName,
+        _classController.text,
+      );
+    }
 
     Navigator.of(context).pop();
   }
@@ -124,7 +169,11 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                   newSchedule = scheduleItem;
                 } else {
                   scheduleItem.forEach((key, value) {
-                    newSchedule.putIfAbsent(key, () => value);
+                    if (newSchedule.containsKey(key)) {
+                      newSchedule.update(key, (v) => value);
+                    } else {
+                      newSchedule.putIfAbsent(key, () => value);
+                    }
                   });
                 }
               });

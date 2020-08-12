@@ -35,8 +35,9 @@ class HomeworkItem extends StatelessWidget {
       height: 115,
       padding: EdgeInsets.symmetric(horizontal: 2, vertical: 1),
       child: GestureDetector(
-        onTap: (){
-          Navigator.of(context).pushNamed(NewHomeworkScreen.routeName, arguments: homeworkItem);
+        onTap: () {
+          Navigator.of(context)
+              .pushNamed(NewHomeworkScreen.routeName, arguments: homeworkItem);
         },
         child: Card(
           child: Column(
@@ -106,7 +107,9 @@ class HomeworkItem extends StatelessWidget {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          DateFormat.MMMMd().format(homeworkItem.dueDate),
+                          homeworkItem.dueDate == null
+                              ? 'No Date'
+                              : DateFormat.MMMMd().format(homeworkItem.dueDate),
                           style: TextStyle(
                               color: color,
                               fontSize: 14,

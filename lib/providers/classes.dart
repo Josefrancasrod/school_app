@@ -46,7 +46,7 @@ class Classes with ChangeNotifier {
         }
       });
       return mapDay == days[day];
-    });
+    }); //  POSIBLE O(n2)
 
     return [...daySchedule];
   }
@@ -58,20 +58,31 @@ class Classes with ChangeNotifier {
     Map<String, Map<String, dynamic>> scheduleItem,
     Color color,
   }) {
-    _items.add(
-      ClassesItem(
-        id: id,
-        name: name,
-        teacherName: teacherName,
-        schedule: scheduleItem,
-        color: color,
-      ),
-    );
-    print(id);
+
+    var index = _items.indexWhere((element) => element.id == id);
+    
+    if(index >= 0){
+        _items[index].name = name;
+        _items[index].teacherName = teacherName;
+        _items[index].color = color;
+        _items[index].schedule = scheduleItem;
+    }else{
+      _items.add(
+        ClassesItem(
+          id: id,
+          name: name,
+          teacherName: teacherName,
+          schedule: scheduleItem,
+          color: color,
+        ),
+      );
+    }
+    
+
     notifyListeners();
   }
 
-  void deleteItem(String id){
+  void deleteItem(String id) {
     _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }
@@ -102,13 +113,13 @@ class Classes with ChangeNotifier {
   ClassesItem getNextClass(String day) {
     ClassesItem nextClass;
     List<ClassesItem> daySchedule = getDaySchedule(DateTime.now().weekday - 1);
-    try{
+    try {
       nextClass = daySchedule.firstWhere(
         (element) =>
             _timeOfDayToDouble(element.schedule[day]['Start']) >
             _timeOfDayToDouble(TimeOfDay.now()),
       );
-    } catch(e){
+    } catch (e) {
       nextClass = null;
     }
     return nextClass;
