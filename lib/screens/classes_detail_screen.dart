@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:school_app/providers/homework.dart';
+import 'package:school_app/screens/new_classes_screen.dart';
 
 import '../providers/classes.dart';
 
@@ -16,6 +17,17 @@ class ClassesDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('ClassName'),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  NewClassesScreen.routeName,
+                  arguments: classItem,
+                );
+              }),
+        ],
       ),
       body: Center(
         child: Column(

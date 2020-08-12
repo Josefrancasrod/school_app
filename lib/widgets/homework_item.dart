@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../screens/new_homework_screen.dart';
 import '../providers/homework.dart' as homework;
 import '../providers/classes.dart';
 
@@ -30,10 +31,14 @@ class HomeworkItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-      child: Container(
-        height: 110,
+    return Container(
+      height: 115,
+      padding: EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context)
+              .pushNamed(NewHomeworkScreen.routeName, arguments: homeworkItem);
+        },
         child: Card(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,7 +107,9 @@ class HomeworkItem extends StatelessWidget {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          DateFormat.MMMMd().format(homeworkItem.dueDate),
+                          homeworkItem.dueDate == null
+                              ? 'No Date'
+                              : DateFormat.MMMMd().format(homeworkItem.dueDate),
                           style: TextStyle(
                               color: color,
                               fontSize: 14,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/new_homework_screen.dart';
 import '../widgets/bottom_sheet_menu.dart';
 import '../providers/homework.dart';
 import '../widgets/homework_item.dart' as hw;
@@ -105,23 +106,8 @@ class HomeworkScreen extends StatelessWidget {
                 children: <Widget>[
                   Dismissible(
                     key: Key(homework.items.values.toList()[i].id),
+                    direction: DismissDirection.endToStart,
                     background: Container(
-                      color: Theme.of(context).accentColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Icon(Icons.edit, color: Colors.white),
-                            Text(
-                              'Edit',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    secondaryBackground: Container(
                       color: Colors.red,
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
@@ -169,9 +155,7 @@ class HomeworkScreen extends StatelessWidget {
                           ),
                         );
                         return isDismiss;
-                      } else {
-                        return isDismiss;
-                      }
+                      } 
                     },
                     child: hw.HomeworkItem(
                       homework.items.values.toList()[i],
