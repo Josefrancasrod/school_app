@@ -65,6 +65,11 @@ class HomeworkScreen extends StatelessWidget {
                 BottomSheetMenu.modal(context);
               },
             ),
+            actions: [
+              IconButton(icon: Icon(Icons.schedule), onPressed: (){
+                Provider.of<Classes>(context, listen: false).fetchAndSetClases();
+              })
+            ],
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.grey[200],
             flexibleSpace: FlexibleSpaceBar(
