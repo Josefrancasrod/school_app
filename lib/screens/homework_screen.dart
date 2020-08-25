@@ -66,9 +66,14 @@ class HomeworkScreen extends StatelessWidget {
               },
             ),
             actions: [
-              IconButton(icon: Icon(Icons.schedule), onPressed: (){
-                Provider.of<Classes>(context, listen: false).fetchAndSetClases();
-              })
+              IconButton(
+                  icon: Icon(Icons.schedule),
+                  onPressed: () async {
+                    await Provider.of<Classes>(context, listen: false)
+                        .fetchAndSetClases();
+                    await Provider.of<Homework>(context, listen: false)
+                        .fetchAndSetHomework();
+                  })
             ],
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.grey[200],
@@ -160,7 +165,7 @@ class HomeworkScreen extends StatelessWidget {
                           ),
                         );
                         return isDismiss;
-                      } 
+                      }
                     },
                     child: hw.HomeworkItem(
                       homework.items.values.toList()[i],

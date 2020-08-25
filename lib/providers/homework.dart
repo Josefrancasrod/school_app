@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/widgets/homework_item.dart';
 
+import '../helpers/db_helper.dart';
+
 enum HomeworkType {
   homework,
   proyect,
@@ -26,6 +28,10 @@ class HomeworkItem {
 }
 
 class Homework with ChangeNotifier {
+  HomeworkType _getHomeworkType(int type) => type == 0
+      ? HomeworkType.homework
+      : type == 1 ? HomeworkType.proyect : HomeworkType.test;
+
   Map<String, HomeworkItem> _items = {};
 
   void addItem({
@@ -36,31 +42,58 @@ class Homework with ChangeNotifier {
     DateTime date,
     HomeworkType type,
   }) {
+    HomeworkItem newHomework = HomeworkItem(
+      id: id,
+      title: title,
+      description: description,
+      asignature: selectedClass,
+      dueDate: date,
+      type: type,
+    );
+
     if (_items.containsKey(id)) {
       _items.update(
         id,
-        (value) => HomeworkItem(
-          id: id,
-          title: title,
-          description: description,
-          asignature: selectedClass,
-          dueDate: date,
-          type: type,
-        ),
+        (value) => newHomework,
       );
     } else {
       _items.putIfAbsent(
         id,
-        () => HomeworkItem(
-          id: id,
-          title: title,
-          description: description,
-          asignature: selectedClass,
-          dueDate: date,
-          type: type,
-        ),
+        () => newHomework,
       );
     }
+    notifyListeners();
+    // print(newHomework.type.index);
+    DBHelper.insert(
+      'homework',
+      {
+        'id': newHomework.id,
+        'title': newHomework.title,
+        'description': newHomework.description,
+        'sclass': newHomework.asignature,
+        'date': newHomework.dueDate.toIso8601String(),
+        'type': newHomework.type.index,
+      },
+    );
+  }
+
+  Future<void> fetchAndSetHomework() async {
+    final homeworkList = await DBHelper.getData('homework');
+
+    homeworkList.forEach((item) {
+      _items.putIfAbsent(
+        item['id'],
+        () => HomeworkItem(
+          id: item['id'],
+          title: item['title'],
+          description: item['description'],
+          asignature: item['sclass'],
+          dueDate: DateTime.parse(item['date']),
+          type: _getHomeworkType(item['type']),
+        ),
+      );
+    });
+
     notifyListeners();
   }
 

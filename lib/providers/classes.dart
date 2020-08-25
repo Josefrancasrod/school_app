@@ -105,7 +105,7 @@ class Classes with ChangeNotifier {
         'start':
             '${schedule[key]['Start'].hour}:${schedule[key]['Start'].minute}',
         'finish':
-            '${schedule[key]['Start'].hour}:${schedule[key]['Start'].minute}',
+            '${schedule[key]['Finish'].hour}:${schedule[key]['Finish'].minute}',
         'classroom': schedule[key]['Classroom'],
         'day': key,
       });
