@@ -62,7 +62,7 @@ class Classes with ChangeNotifier {
     String teacherName,
     Map<String, Map<String, dynamic>> scheduleItem,
     Color color,
-  }) {
+  }) async {
     var newClasses = ClassesItem(
       id: id,
       name: name,
@@ -78,11 +78,12 @@ class Classes with ChangeNotifier {
       _items[index].teacherName = teacherName;
       _items[index].color = color;
       _items[index].schedule = scheduleItem;
+      _updateSchedule(id, scheduleItem);
       DBHelper.updateClasses(
-        id,
+        _items[index].id,
         'classes',
         {
-          'id': id,
+          'id': _items[index].id,
           'title': name,
           'teacher': teacherName,
           'color': color.value,
@@ -100,7 +101,7 @@ class Classes with ChangeNotifier {
           'color': newClasses.color.value,
         },
       );
-      _insertSchedule(id, newClasses.schedule);
+      _insertSchedule(newClasses.id, newClasses.schedule);
     }
 
     notifyListeners();
@@ -116,6 +117,20 @@ class Classes with ChangeNotifier {
   void _insertSchedule(String id, Map<String, dynamic> schedule) {
     schedule.forEach((key, value) async {
       await DBHelper.insert('schedule', {
+        'idClass': id,
+        'start':
+            '${schedule[key]['Start'].hour}:${schedule[key]['Start'].minute}',
+        'finish':
+            '${schedule[key]['Finish'].hour}:${schedule[key]['Finish'].minute}',
+        'classroom': schedule[key]['Classroom'],
+        'day': key,
+      });
+    });
+  }
+
+  void _updateSchedule(String id, Map<String, dynamic> schedule) {
+    schedule.forEach((key, value) async {
+      await DBHelper.updateSchedule(id, {
         'idClass': id,
         'start':
             '${schedule[key]['Start'].hour}:${schedule[key]['Start'].minute}',

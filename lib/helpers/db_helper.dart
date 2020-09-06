@@ -44,13 +44,13 @@ class DBHelper {
     );
   }
 
-  static Future<void> deleteClasses(String table,String classes, String id) async {
+  static Future<void> deleteClasses(
+      String table, String classes, String id) async {
     final db = await DBHelper.database();
 
     await db.delete(table, where: 'title =\'$classes\'');
     await db.delete('homework', where: 'sclass=\'$classes\'');
     await db.delete('schedule', where: 'idClass=\'$id\'');
-    
   }
 
   static Future<List<Map<String, dynamic>>> getData(String table) async {
@@ -64,10 +64,27 @@ class DBHelper {
     return db.rawQuery('SELECT * FROM schedule WHERE idClass = \"$id\"');
   }
 
+  static Future<void> updateSchedule(
+    String idClass, Map<String, dynamic> schedule) async {
+    final db = await DBHelper.database();
+    print(schedule);
+
+    await db.delete('schedule', where: 'idClass = \'$idClass\'');
+    await db.insert(
+      'schedule',
+      schedule,
+      conflictAlgorithm: sql.ConflictAlgorithm.replace,
+    );
+
+    // await db.rawUpdate(
+    //   'UPDATE schedule SET idClass = \'${schedule['idClass']}\', start = \'${schedule['start']}\', finish = \'${schedule['finish']}\' , classroom = \'${schedule['classroom']}\' , day = \'${schedule['day']}\' WHERE idClass = \'$idClass\' AND day = \'${schedule['day']}\'',
+    // );
+  }
+
   static Future<void> updateHomeworkClasses(
-      String prevClass, String classes) async {
+      String prevClass, String newclass) async {
     final db = await DBHelper.database();
     return db.rawUpdate(
-        'UPDATE homework SET sclass=\'$classes\' WHERE sclass=\'$prevClass\'');
+        'UPDATE homework SET sclass=\'$newclass\' WHERE sclass=\'$prevClass\'');
   }
 }

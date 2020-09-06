@@ -159,26 +159,24 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
   Widget _scheduleCard({String dia, Map<String, dynamic> hour, bool haveDay}) {
     return InkWell(
-      onTap: !haveDay
-          ? () async {
-              final scheduleItem = await Navigator.pushNamed(
-                      context, AddScheduleScreen.routeName)
-                  as Map<String, Map<String, dynamic>>;
-              setState(() {
-                if (newSchedule == null) {
-                  newSchedule = scheduleItem;
-                } else {
-                  scheduleItem.forEach((key, value) {
-                    if (newSchedule.containsKey(key)) {
-                      newSchedule.update(key, (v) => value);
-                    } else {
-                      newSchedule.putIfAbsent(key, () => value);
-                    }
-                  });
-                }
-              });
-            }
-          : () {},
+      onTap: () async {
+        final scheduleItem =
+            await Navigator.pushNamed(context, AddScheduleScreen.routeName)
+                as Map<String, Map<String, dynamic>>;
+        setState(() {
+          if (newSchedule == null) {
+            newSchedule = scheduleItem;
+          } else {
+            scheduleItem.forEach((key, value) {
+              if (newSchedule.containsKey(key)) {
+                newSchedule.update(key, (v) => value);
+              } else {
+                newSchedule.putIfAbsent(key, () => value);
+              }
+            });
+          }
+        });
+      },
       splashColor: classColor,
       borderRadius: BorderRadius.circular(15),
       child: Container(
