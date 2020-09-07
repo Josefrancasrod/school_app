@@ -22,7 +22,9 @@ class ClassesItem {
 class Classes with ChangeNotifier {
   double _timeOfDayToDouble(TimeOfDay timeOfDay) =>
       timeOfDay.hour + timeOfDay.minute / 60.0;
-  TimeOfDay _timeOfDayFromString(String time) => TimeOfDay(hour: int.parse('${time.split(':')[0]}'), minute: int.parse('${time.split(':')[1]}'));
+  TimeOfDay _timeOfDayFromString(String time) => TimeOfDay(
+      hour: int.parse('${time.split(':')[0]}'),
+      minute: int.parse('${time.split(':')[1]}'));
   List<ClassesItem> _items = [];
   List<String> days = [
     'Monday',
@@ -60,7 +62,7 @@ class Classes with ChangeNotifier {
     String teacherName,
     Map<String, Map<String, dynamic>> scheduleItem,
     Color color,
-  }) {
+  }) async {
     var newClasses = ClassesItem(
       id: id,
       name: name,
@@ -70,31 +72,45 @@ class Classes with ChangeNotifier {
     );
 
     var index = _items.indexWhere((element) => element.id == id);
-
     if (index >= 0) {
+      var prevClass = _items[index].name;
       _items[index].name = name;
       _items[index].teacherName = teacherName;
       _items[index].color = color;
       _items[index].schedule = scheduleItem;
+      _updateSchedule(id, scheduleItem);
+      DBHelper.update(
+        _items[index].id,
+        'classes',
+        {
+          'id': _items[index].id,
+          'title': name,
+          'teacher': teacherName,
+          'color': color.value,
+        },
+      );
+      DBHelper.updateHomeworkClasses(prevClass, name);
     } else {
       _items.add(newClasses);
+      DBHelper.insert(
+        'classes',
+        {
+          'id': newClasses.id,
+          'title': newClasses.name,
+          'teacher': newClasses.teacherName,
+          'color': newClasses.color.value,
+        },
+      );
+      _insertSchedule(newClasses.id, newClasses.schedule);
     }
 
     notifyListeners();
-    DBHelper.insert(
-      'classes',
-      {
-        'id': newClasses.id,
-        'title': newClasses.name,
-        'teacher': newClasses.teacherName,
-        'color': newClasses.color.value,
-      },
-    );
-    _insertSchedule(id, newClasses.schedule);
   }
 
   void deleteItem(String id) {
+    var cl = _items.firstWhere((element) => element.id == id);
     _items.removeWhere((element) => element.id == id);
+    DBHelper.deleteClasses('classes', cl.name, id);
     notifyListeners();
   }
 
@@ -110,7 +126,20 @@ class Classes with ChangeNotifier {
         'day': key,
       });
     });
+  }
 
+  void _updateSchedule(String id, Map<String, dynamic> schedule) {
+    schedule.forEach((key, value) async {
+      await DBHelper.updateSchedule(id, {
+        'idClass': id,
+        'start':
+            '${schedule[key]['Start'].hour}:${schedule[key]['Start'].minute}',
+        'finish':
+            '${schedule[key]['Finish'].hour}:${schedule[key]['Finish'].minute}',
+        'classroom': schedule[key]['Classroom'],
+        'day': key,
+      });
+    });
   }
 
   Future<void> fetchAndSetClases() async {
@@ -126,7 +155,7 @@ class Classes with ChangeNotifier {
           ),
         )
         .toList();
-    _items.forEach((element) async{
+    _items.forEach((element) async {
       element.schedule = await _fetchSchedules(element.id);
     });
     notifyListeners();
@@ -136,14 +165,16 @@ class Classes with ChangeNotifier {
     final scheduleList = await DBHelper.getSchedule(id, 'schedule');
     Map<String, Map<String, dynamic>> classSchedule = {};
 
-    for(var i=0; i<scheduleList.length; i++){}
+    for (var i = 0; i < scheduleList.length; i++) {}
 
     scheduleList.forEach((item) {
-      classSchedule.putIfAbsent(item['day'], () => {
-        'Start': _timeOfDayFromString(item['start']),
-        'Finish': _timeOfDayFromString(item['finish']),
-        'Classroom': item['classroom'],
-      });
+      classSchedule.putIfAbsent(
+          item['day'],
+          () => {
+                'Start': _timeOfDayFromString(item['start']),
+                'Finish': _timeOfDayFromString(item['finish']),
+                'Classroom': item['classroom'],
+              });
     });
 
     return classSchedule;
