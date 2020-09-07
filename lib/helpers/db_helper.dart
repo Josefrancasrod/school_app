@@ -33,15 +33,22 @@ class DBHelper {
     );
   }
 
-  static Future<void> updateClasses(
+  static Future<void> update(
     String id,
     String table,
     Map<String, dynamic> data,
   ) async {
     final db = await DBHelper.database();
-    db.rawUpdate(
-      'UPDATE $table SET id=\'${data['id']}\', title=\'${data['title']}\', teacher=\'${data['teacher']}\', color=\'${data['color']}\' WHERE id=\'${data['id']}\'',
-    );
+
+    if (table == 'classes') {
+      db.rawUpdate(
+        'UPDATE $table SET id=\'${data['id']}\', title=\'${data['title']}\', teacher=\'${data['teacher']}\', color=\'${data['color']}\' WHERE id=\'${data['id']}\'',
+      );
+    }else{
+      db.rawUpdate(
+        'UPDATE $table SET id=\'${data['id']}\', title=\'${data['title']}\', description=\'${data['description']}\', sclass=\'${data['sclass']}\', date=\'${data['date']}\', type=\'${data['type']}\' WHERE id=\'${data['id']}\'',
+      );
+    }
   }
 
   static Future<void> deleteClasses(
@@ -51,6 +58,13 @@ class DBHelper {
     await db.delete(table, where: 'title =\'$classes\'');
     await db.delete('homework', where: 'sclass=\'$classes\'');
     await db.delete('schedule', where: 'idClass=\'$id\'');
+  }
+
+  static Future<void> deleteHomework(String id) async{
+    final db = await DBHelper.database();
+
+    await db.delete('homework', where: 'id=\'$id\'');
+
   }
 
   static Future<List<Map<String, dynamic>>> getData(String table) async {
@@ -65,9 +79,8 @@ class DBHelper {
   }
 
   static Future<void> updateSchedule(
-    String idClass, Map<String, dynamic> schedule) async {
+      String idClass, Map<String, dynamic> schedule) async {
     final db = await DBHelper.database();
-    print(schedule);
 
     await db.delete('schedule', where: 'idClass = \'$idClass\'');
     await db.insert(
@@ -75,10 +88,6 @@ class DBHelper {
       schedule,
       conflictAlgorithm: sql.ConflictAlgorithm.replace,
     );
-
-    // await db.rawUpdate(
-    //   'UPDATE schedule SET idClass = \'${schedule['idClass']}\', start = \'${schedule['start']}\', finish = \'${schedule['finish']}\' , classroom = \'${schedule['classroom']}\' , day = \'${schedule['day']}\' WHERE idClass = \'$idClass\' AND day = \'${schedule['day']}\'',
-    // );
   }
 
   static Future<void> updateHomeworkClasses(

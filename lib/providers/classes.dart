@@ -79,7 +79,7 @@ class Classes with ChangeNotifier {
       _items[index].color = color;
       _items[index].schedule = scheduleItem;
       _updateSchedule(id, scheduleItem);
-      DBHelper.updateClasses(
+      DBHelper.update(
         _items[index].id,
         'classes',
         {

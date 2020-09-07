@@ -56,15 +56,8 @@ class Homework with ChangeNotifier {
         id,
         (value) => newHomework,
       );
-    } else {
-      _items.putIfAbsent(
-        id,
-        () => newHomework,
-      );
-    }
-    notifyListeners();
-    // print(newHomework.type.index);
-    DBHelper.insert(
+      DBHelper.update(
+        newHomework.id,
       'homework',
       {
         'id': newHomework.id,
@@ -75,6 +68,25 @@ class Homework with ChangeNotifier {
         'type': newHomework.type.index,
       },
     );
+    } else {
+      _items.putIfAbsent(
+        id,
+        () => newHomework,
+      );
+      DBHelper.insert(
+        'homework',
+        {
+          'id': newHomework.id,
+          'title': newHomework.title,
+          'description': newHomework.description,
+          'sclass': newHomework.asignature,
+          'date': newHomework.dueDate.toIso8601String(),
+          'type': newHomework.type.index,
+        },
+      );
+    }
+    notifyListeners();
+    // print(newHomework.type.index);
   }
 
   Future<void> fetchAndSetHomework() async {
@@ -99,6 +111,7 @@ class Homework with ChangeNotifier {
 
   void deleteItem(String id) {
     _items.removeWhere((key, value) => value.id == id);
+    DBHelper.deleteHomework(id);
     notifyListeners();
   }
 
