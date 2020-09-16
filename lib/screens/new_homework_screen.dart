@@ -129,7 +129,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
       date: _selectedDate,
       type: _type,
     );
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed('/');
   }
 
   void _unFocusNode() {

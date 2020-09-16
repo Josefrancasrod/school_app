@@ -154,7 +154,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       );
     }
 
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed('/');
   }
 
   Widget _scheduleCard({String dia, Map<String, dynamic> hour, bool haveDay}) {

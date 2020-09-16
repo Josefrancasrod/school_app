@@ -77,7 +77,7 @@ class _TabsScreenState extends State<TabsScreen> {
       body: _pages[_selectedPageIndex]['page'],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed(NewHomeworkScreen.routeName);
+          Navigator.of(context).pushReplacementNamed(NewHomeworkScreen.routeName);
           //Add a new[Homework, Class, ]
         },
         child: Icon(
