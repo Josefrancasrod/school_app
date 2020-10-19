@@ -119,6 +119,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   }
 
   void _presentClassPicker(List<String> classes) {
+    _unFocusNode();
     showDialog(
       context: context,
       builder: (BuildContext) => AlertDialog(
@@ -136,7 +137,13 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
           ),
         ],
         content: Container(
-          child: Text('Hello'),
+          height: 150,
+          width: 150,
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: classes.length,
+            itemBuilder: (tx, index) => Text(classes[index]),
+          ),
         ),
       ),
     );
