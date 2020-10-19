@@ -118,6 +118,30 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
     });
   }
 
+  void _presentClassPicker(List<String> classes) {
+    showDialog(
+      context: context,
+      builder: (BuildContext) => AlertDialog(
+        title: Text(
+          'Select a class',
+          style: TextStyle(
+              fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+        content: Container(
+          child: Text('Hello'),
+        ),
+      ),
+    );
+  }
+
   void _addHomework() {
     Provider.of<Homework>(context, listen: false).addItem(
       id: _initValue['id'] != null
@@ -221,43 +245,75 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                             EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       ),
                     ),
-                    CustomDivider('Class'),
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: tapOnClass
-                                ? Theme.of(context).accentColor
-                                : Colors.grey[800],
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: DropdownButton<String>(
-                        value: _classValue,
-                        items: listOfClasses
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Text(value),
+                    // CustomDivider('Class'),
+                    SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
+                          child: Text(
+                            'Class',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.grey[700],
                             ),
-                          );
-                        }).toList(),
-                        onTap: () {
-                          _unFocusNode();
-                          _unSelectClass(true);
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            _classValue = value;
-                            tapOnClass = true;
-                          });
-                        },
-                        isExpanded: true,
-                        underline: Container(),
-                      ),
+                          ),
+                        ),
+                        Expanded(
+                          child: RaisedButton(
+                            onPressed: () {
+                              _presentClassPicker(listOfClasses);
+                            },
+                            child: Text('Select a class'),
+                            color: Colors.white,
+                            textColor: Theme.of(context).accentColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 10),
+
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //       border: Border.all(
+                    //         color: tapOnClass
+                    //             ? Theme.of(context).accentColor
+                    //             : Colors.grey[800],
+                    //         width: 1,
+                    //       ),
+                    //       borderRadius: BorderRadius.all(Radius.circular(5))),
+                    //   child: DropdownButton<String>(
+                    //     value: _classValue,
+                    //     items: listOfClasses
+                    //         .map<DropdownMenuItem<String>>((String value) {
+                    //       return DropdownMenuItem<String>(
+                    //         value: value,
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.all(15),
+                    //           child: Text(value),
+                    //         ),
+                    //       );
+                    //     }).toList(),
+                    //     onTap: () {
+                    //       _unFocusNode();
+                    //       _unSelectClass(true);
+                    //     },
+                    //     onChanged: (value) {
+                    //       setState(() {
+                    //         _classValue = value;
+                    //         tapOnClass = true;
+                    //       });
+                    //     },
+                    //     isExpanded: true,
+                    //     underline: Container(),
+                    //   ),
+                    // ),
+                    SizedBox(height: 5),
                     Row(
                       children: <Widget>[
                         Padding(
@@ -273,18 +329,19 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                             ),
                           ),
                         ),
-                        RaisedButton(
-                          onPressed: _presentDatePicker,
-                          child: Text(_selectedDate != null
-                              ? DateFormat.yMMMMEEEEd().format(_selectedDate)
-                              : 'Pick a Date'),
-                          color: Theme.of(context).accentColor,
-                          textColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
+                        Expanded(
+                          child: RaisedButton(
+                            onPressed: _presentDatePicker,
+                            child: Text(_selectedDate != null
+                                ? DateFormat.yMMMMEEEEd().format(_selectedDate)
+                                : 'Pick a Date'),
+                            color: Colors.white,
+                            textColor: Theme.of(context).accentColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
                           ),
                         ),
-                        Expanded(child: SizedBox()),
                       ],
                     ),
                     CustomDivider('Type'),
