@@ -43,7 +43,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
         ),
       );
     }
-
+ 
     void modal() {
       showModalBottomSheet(
         context: context,
@@ -154,8 +154,6 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                                     homeworkData.deleteItem(
                                       homeworkData.items.values.toList()[i].id,
                                     );
-
-                                    // homework = Provider.of<Homework>(context, listen: false);
                                   });
 
                                   Scaffold.of(context).showSnackBar(
