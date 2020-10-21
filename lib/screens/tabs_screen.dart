@@ -51,6 +51,10 @@ class _TabsScreenState extends State<TabsScreen> {
     );
   }
 
+  Future<void> _goToNewHomeworkScreen() async {
+    await Navigator.of(context).pushNamed(NewHomeworkScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +81,7 @@ class _TabsScreenState extends State<TabsScreen> {
       body: _pages[_selectedPageIndex]['page'],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushReplacementNamed(NewHomeworkScreen.routeName);
+          _goToNewHomeworkScreen();
           //Add a new[Homework, Class, ]
         },
         child: Icon(
