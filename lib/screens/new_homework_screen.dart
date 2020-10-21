@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:school_app/screens/homework_screen.dart';
 
 import './new_classes_screen.dart';
 import '../providers/homework.dart';
@@ -32,6 +33,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   FocusNode titleNode;
   FocusNode descriptionNode;
   var _isInit = true;
+  var _addAnewClass = false;
 
   List<ClassesItem> listOfClasses = [];
   Map<String, Color> mapOfClasses = {};
@@ -120,6 +122,14 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
     });
   }
 
+  Future<void> _goToNewClassScreen() async {
+    await Navigator.of(context).pushNamed(NewClassesScreen.routeName);
+    setState(() {
+      mapOfClasses = {};
+      _addAnewClass = true;
+    });
+  }
+
   Widget _optionButton(String name, Color color) {
     return ListTile(
       onTap: () {
@@ -129,7 +139,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
             _classValue = name;
           });
         } else {
-          Navigator.of(context).pushNamed(NewClassesScreen.routeName);
+          _goToNewClassScreen();
         }
       },
       title: Text(
@@ -165,8 +175,8 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
           ),
         ],
         content: Container(
-          height: 200,
-          width: 300,
+          height: listOfClasses != null ? 200 : 70,
+          width: 150,
           child: ListView.builder(
             // physics: const NeverScrollableScrollPhysics(),
             itemCount: classes.length,
@@ -191,7 +201,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
       date: _selectedDate,
       type: _type,
     );
-    Navigator.of(context).pushReplacementNamed('/');
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
   }
 
   void _unFocusNode() {
@@ -221,7 +231,6 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
     //     _classValue = listOfClasses[0];
     //   });
     // }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,

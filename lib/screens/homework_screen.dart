@@ -29,8 +29,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
   @override
   Widget build(BuildContext context) {
     Color _getColor(String name) {
-      ClassesItem classItem =
-          classes.firstWhere((element) => element.name == name);
+      ClassesItem classItem = classes.firstWhere((element) => element.name == name);
       return classItem.color;
     }
 
@@ -43,7 +42,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
         ),
       );
     }
- 
+
     void modal() {
       showModalBottomSheet(
         context: context,
