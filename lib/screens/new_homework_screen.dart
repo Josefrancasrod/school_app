@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import './new_classes_screen.dart';
 import '../providers/homework.dart';
 import '../providers/classes.dart';
 import '../widgets/custom_divider.dart';
@@ -32,7 +33,8 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   FocusNode descriptionNode;
   var _isInit = true;
 
-  List<String> listOfClasses = [];
+  List<ClassesItem> listOfClasses = [];
+  Map<String, Color> mapOfClasses = {};
 
   @override
   void initState() {
@@ -118,7 +120,33 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
     });
   }
 
-  void _presentClassPicker(List<String> classes) {
+  Widget _optionButton(String name, Color color) {
+    return ListTile(
+      onTap: () {
+        Navigator.of(context).pop();
+        if (color != null) {
+          setState(() {
+            _classValue = name;
+          });
+        } else {
+          Navigator.of(context).pushNamed(NewClassesScreen.routeName);
+        }
+      },
+      title: Text(
+        name,
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+      ),
+      trailing: Icon(
+        color != null ? Icons.class_ : Icons.add,
+        color: color != null ? color : Theme.of(context).accentColor,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+    );
+  }
+
+  void _presentClassPicker(Map<String, Color> classes) {
     _unFocusNode();
     showDialog(
       context: context,
@@ -137,12 +165,15 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
           ),
         ],
         content: Container(
-          height: 150,
-          width: 150,
+          height: 200,
+          width: 300,
           child: ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(),
             itemCount: classes.length,
-            itemBuilder: (tx, index) => Text(classes[index]),
+            itemBuilder: (ctx, index) => _optionButton(
+              classes.keys.toList()[index],
+              classes[classes.keys.toList()[index]],
+            ),
           ),
         ),
       ),
@@ -177,14 +208,19 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   Widget build(BuildContext context) {
     listOfClasses = Provider.of<Classes>(context, listen: false)
         .items
-        .map((item) => item.name)
+        .map((item) => item)
         .toList();
 
-    if (!tapOnClass && _classValue == null) {
-      setState(() {
-        _classValue = listOfClasses[0];
-      });
-    }
+    listOfClasses.forEach((item) {
+      mapOfClasses.putIfAbsent(item.name, () => item.color);
+    });
+    mapOfClasses.putIfAbsent("Add a new class", () => null);
+
+    // if (!tapOnClass && _classValue == null) {
+    //   setState(() {
+    //     _classValue = listOfClasses[0];
+    //   });
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -272,9 +308,11 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                         Expanded(
                           child: RaisedButton(
                             onPressed: () {
-                              _presentClassPicker(listOfClasses);
+                              _presentClassPicker(mapOfClasses);
                             },
-                            child: Text('Select a class'),
+                            child: Text(_classValue != null
+                                ? _classValue
+                                : 'Select a class'),
                             color: Colors.white,
                             textColor: Theme.of(context).accentColor,
                             shape: RoundedRectangleBorder(
