@@ -341,14 +341,14 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                     CustomDivider('Add a schedule'),
                     Container(
                       width: double.infinity,
-                      height: 200,
+                      height: 350,
                       child: GridView(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 0, vertical: 10),
                         children: daysList,
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 150,
-                          childAspectRatio: 3 / 2,
+                          maxCrossAxisExtent: 200,
+                          childAspectRatio: 5 / 2,
                           crossAxisSpacing: 5,
                           mainAxisSpacing: 5,
                         ),
