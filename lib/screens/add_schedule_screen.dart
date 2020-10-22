@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 
 import '../widgets/custom_divider.dart';
 import '../providers/classes.dart';
@@ -25,6 +26,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     'Thursday': false,
     'Friday': false,
     'Saturday': false,
+    'Sunday': false,
   };
 
   TimeOfDay start, finish, entry;
@@ -35,6 +37,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     'Thursday',
     'Friday',
     'Saturday',
+    'Sunday',
   ];
 
   void _timePicker(ButtomType type) async {
@@ -78,24 +81,27 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
   }
 
   Widget _filterChip(String text) {
-    return FilterChip(
-      label: Container(
-        width: 60,
-        child: Center(child: Text(text)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+      child: FilterChip(
+        label: Container(
+          width: 60,
+          child: Center(child: Text(text)),
+        ),
+        labelStyle: TextStyle(
+          color: isSelected[text] ? Colors.white : Colors.black,
+          fontFamily: 'Montserrat',
+          fontSize: 10,
+        ),
+        selected: isSelected[text],
+        onSelected: (bool selected) {
+          setState(() {
+            isSelected[text] = !isSelected[text];
+          });
+        },
+        selectedColor: Theme.of(context).accentColor,
+        checkmarkColor: Colors.white,
       ),
-      labelStyle: TextStyle(
-        color: isSelected[text] ? Colors.white : Colors.black,
-        fontFamily: 'Montserrat',
-        fontSize: 10,
-      ),
-      selected: isSelected[text],
-      onSelected: (bool selected) {
-        setState(() {
-          isSelected[text] = !isSelected[text];
-        });
-      },
-      selectedColor: Theme.of(context).accentColor,
-      checkmarkColor: Colors.white,
     );
   }
 
@@ -118,29 +124,35 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                 child: Column(
                   children: <Widget>[
                     CustomDivider('Pick the days'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            _filterChip('Monday'),
-                            _filterChip('Thursday'),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            _filterChip('Tuesday'),
-                            _filterChip('Friday'),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            _filterChip('Wednesday'),
-                            _filterChip('Saturday'),
-                          ],
-                        )
-                      ],
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        children: <Widget>[
+                          FittedBox(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _filterChip('Monday'),
+                                _filterChip('Tuesday'),
+                                _filterChip('Wednesday'),
+                                _filterChip('Thursday'),
+                              ],
+                            ),
+                          ),
+                          FittedBox(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _filterChip('Friday'),
+                                _filterChip('Saturday'),
+                                _filterChip('Sunday'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
