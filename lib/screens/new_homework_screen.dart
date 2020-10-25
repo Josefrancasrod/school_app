@@ -38,6 +38,11 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   List<ClassesItem> listOfClasses = [];
   Map<String, Color> mapOfClasses = {};
 
+  Color classError = Colors.blueAccent[400];
+  Color dateError = Colors.blueAccent[400];
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -117,6 +122,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
       } else {
         setState(() {
           _selectedDate = pickedDate;
+          dateError = Colors.blueAccent[400];
         });
       }
     });
@@ -137,6 +143,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
         if (color != null) {
           setState(() {
             _classValue = name;
+            classError = Colors.blueAccent[400];
           });
         } else {
           _goToNewClassScreen();
@@ -191,6 +198,30 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   }
 
   void _addHomework() {
+    final isValid = _formKey.currentState.validate();
+    final hasAClass = _classValue != null;
+    final hasADate = _selectedDate != null;
+    var isAllValid = true;
+
+    if (!isValid) {
+      isAllValid = false;
+    }
+    if(!hasAClass){
+      setState(() {
+        classError = Colors.red;
+      });
+      isAllValid = false;
+    }
+    if(!hasADate){
+      setState(() {
+        dateError = Colors.red;
+      });
+      isAllValid = false;
+    }
+    if(!isAllValid){
+      return;
+    }
+    
     Provider.of<Homework>(context, listen: false).addItem(
       id: _initValue['id'] != null
           ? _initValue['id']
@@ -201,7 +232,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
       date: _selectedDate,
       type: _type,
     );
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
   }
 
   void _unFocusNode() {
@@ -246,167 +277,180 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    CustomDivider('Title'),
-                    TextField(
-                      autofocus: true,
-                      focusNode: titleNode,
-                      controller: titleController,
-                      decoration: InputDecoration(
-                        // labelText: 'Title',
-                        // labelStyle: TextStyle(
-                        //     fontSize: 20, fontWeight: FontWeight.bold),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      CustomDivider('Title'),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: titleNode,
+                        controller: titleController,
+                        decoration: InputDecoration(
+                          // labelText: 'Title',
+                          // labelStyle: TextStyle(
+                          //     fontSize: 20, fontWeight: FontWeight.bold),
 
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).accentColor, width: 1.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).accentColor,
+                                width: 1.0),
+                          ),
+                          border: OutlineInputBorder(),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         ),
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        onTap: () {
+                          _unSelectClass(false);
+                        },
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(descriptionNode);
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a homework name';
+                          }
+                          return null;
+                        },
                       ),
-                      onTap: () {
-                        _unSelectClass(false);
-                      },
-                      onSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(descriptionNode);
-                      },
-                    ),
-                    CustomDivider('Description'),
-                    TextField(
-                      focusNode: descriptionNode,
-                      controller: descriptionController,
-                      maxLines: 5,
-                      onTap: () {
-                        _unSelectClass(false);
-                      },
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      CustomDivider('Description'),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: descriptionNode,
+                        controller: descriptionController,
+                        maxLines: 5,
+                        onTap: () {
+                          _unSelectClass(false);
+                        },
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).accentColor,
+                                width: 1.0),
+                          ),
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 15),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).accentColor, width: 1.0),
-                        ),
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       ),
-                    ),
-                    // CustomDivider('Class'),
-                    SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 15),
-                          child: Text(
-                            'Class',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.grey[700],
+                      // CustomDivider('Class'),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            child: Text(
+                              'Class',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.grey[700],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: RaisedButton(
-                            onPressed: () {
-                              _presentClassPicker(mapOfClasses);
-                            },
-                            child: Text(_classValue != null
-                                ? _classValue
-                                : 'Select a class'),
-                            color: Colors.white,
-                            textColor: Theme.of(context).accentColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                          Expanded(
+                            child: RaisedButton(
+                              onPressed: () {
+                                _presentClassPicker(mapOfClasses);
+                              },
+                              child: Text(_classValue != null
+                                  ? _classValue
+                                  : 'Select a class'),
+                              color: Colors.white,
+                              textColor: classError,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
 
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //       border: Border.all(
-                    //         color: tapOnClass
-                    //             ? Theme.of(context).accentColor
-                    //             : Colors.grey[800],
-                    //         width: 1,
-                    //       ),
-                    //       borderRadius: BorderRadius.all(Radius.circular(5))),
-                    //   child: DropdownButton<String>(
-                    //     value: _classValue,
-                    //     items: listOfClasses
-                    //         .map<DropdownMenuItem<String>>((String value) {
-                    //       return DropdownMenuItem<String>(
-                    //         value: value,
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.all(15),
-                    //           child: Text(value),
-                    //         ),
-                    //       );
-                    //     }).toList(),
-                    //     onTap: () {
-                    //       _unFocusNode();
-                    //       _unSelectClass(true);
-                    //     },
-                    //     onChanged: (value) {
-                    //       setState(() {
-                    //         _classValue = value;
-                    //         tapOnClass = true;
-                    //       });
-                    //     },
-                    //     isExpanded: true,
-                    //     underline: Container(),
-                    //   ),
-                    // ),
-                    SizedBox(height: 5),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 15),
-                          child: Text(
-                            'Due Date',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.grey[700],
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //       border: Border.all(
+                      //         color: tapOnClass
+                      //             ? Theme.of(context).accentColor
+                      //             : Colors.grey[800],
+                      //         width: 1,
+                      //       ),
+                      //       borderRadius: BorderRadius.all(Radius.circular(5))),
+                      //   child: DropdownButton<String>(
+                      //     value: _classValue,
+                      //     items: listOfClasses
+                      //         .map<DropdownMenuItem<String>>((String value) {
+                      //       return DropdownMenuItem<String>(
+                      //         value: value,
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(15),
+                      //           child: Text(value),
+                      //         ),
+                      //       );
+                      //     }).toList(),
+                      //     onTap: () {
+                      //       _unFocusNode();
+                      //       _unSelectClass(true);
+                      //     },
+                      //     onChanged: (value) {
+                      //       setState(() {
+                      //         _classValue = value;
+                      //         tapOnClass = true;
+                      //       });
+                      //     },
+                      //     isExpanded: true,
+                      //     underline: Container(),
+                      //   ),
+                      // ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            child: Text(
+                              'Due Date',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.grey[700],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: RaisedButton(
-                            onPressed: _presentDatePicker,
-                            child: Text(_selectedDate != null
-                                ? DateFormat.yMMMMEEEEd().format(_selectedDate)
-                                : 'Pick a Date'),
-                            color: Colors.white,
-                            textColor: Theme.of(context).accentColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                          Expanded(
+                            child: RaisedButton(
+                              onPressed: _presentDatePicker,
+                              child: Text(_selectedDate != null
+                                  ? DateFormat.yMMMMEEEEd()
+                                      .format(_selectedDate)
+                                  : 'Pick a Date'),
+                              color: Colors.white,
+                              textColor: dateError,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    CustomDivider('Type'),
-                    Column(
-                      children: <Widget>[
-                        _radioList('Homework', HomeworkType.homework),
-                        _radioList('Proyect', HomeworkType.proyect),
-                        _radioList('Test', HomeworkType.test),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                      CustomDivider('Type'),
+                      Column(
+                        children: <Widget>[
+                          _radioList('Homework', HomeworkType.homework),
+                          _radioList('Proyect', HomeworkType.proyect),
+                          _radioList('Test', HomeworkType.test),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
