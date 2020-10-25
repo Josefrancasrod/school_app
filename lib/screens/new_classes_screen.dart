@@ -33,6 +33,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
   String _oldName;
 
   var _isInit = true;
+  var _isEditing;
   bool _hasASchedule = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -77,9 +78,12 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
         classColor = _initValue['color'];
         newSchedule = _initValue['schedule'];
         classError = Colors.white;
+        _isEditing = true;
+      } else {
+        _isEditing = false;
       }
     }
-    _isInit = false;
+        _isInit = false;
 
     super.didChangeDependencies();
   }
@@ -93,6 +97,20 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     _classroomNode.dispose();
 
     super.dispose();
+  }
+
+  bool _nameExist(String name) {
+    var listOfClasses = Provider.of<Classes>(context, listen: false)
+        .items
+        .map((item) => item)
+        .toList();
+
+    for (var i = 0; i < listOfClasses.length; i++) {
+      if (listOfClasses[i].name == name) {
+        return true;
+      }
+    }
+    return false;
   }
 
   void _showColorPicker() {
@@ -326,6 +344,9 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please provide the name of the class';
+                          }
+                          if (_nameExist(value)) {
+                            return _isEditing ? null : 'That class already exist';
                           }
                           return null;
                         },
