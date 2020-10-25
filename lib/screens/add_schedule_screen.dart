@@ -19,6 +19,11 @@ class AddScheduleScreen extends StatefulWidget {
 
 class _AddScheduleScreenState extends State<AddScheduleScreen> {
   final _classroomController = TextEditingController();
+  final _keyForm = GlobalKey<FormState>();
+  Color startError = Colors.blueAccent[400];
+  Color finishError = Colors.blueAccent[400];
+  bool _showError = false;
+
   Map<String, bool> isSelected = {
     'Monday': false,
     'Tuesday': false,
@@ -40,6 +45,16 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     'Sunday',
   ];
 
+  bool isOneDaySelected(){
+    bool oneIsTrue = false;
+    isSelected.forEach((key, value) {
+      if(value){
+        oneIsTrue = true;
+      }
+    });
+    return oneIsTrue;
+  }
+
   void _timePicker(ButtomType type) async {
     TimeOfDay entry = await showTimePicker(
       context: context,
@@ -49,12 +64,15 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
       switch (type) {
         case ButtomType.start:
           setState(() {
+            startError = Colors.blueAccent[400];
+            finishError = Colors.blueAccent[400];
             start = entry;
             finish = TimeOfDay(hour: entry.hour + 1, minute: entry.minute);
           });
           break;
         case ButtomType.finish:
           setState(() {
+            finishError = Colors.blueAccent[400];
             finish = entry;
           });
           break;
@@ -63,6 +81,38 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
   }
 
   void _saveSchedule(Map<String, bool> isSelected, List<TimeOfDay> time) {
+    final isValid = _keyForm.currentState.validate();
+    final isOneSelected = isOneDaySelected();
+    final hasAStart = start != null;
+    final hasAFinish = finish != null;
+  
+    var isAllValid = true;
+
+    if(!isValid){
+      isAllValid = false;
+    }
+    if(!isOneSelected){
+      setState(() {
+        _showError = true;
+      });
+      isAllValid = false;
+    }
+    if(!hasAStart){
+      setState(() {
+        startError = Colors.red;
+      });
+       isAllValid = false;
+    }
+    if(!hasAFinish){
+      setState(() {
+        finishError = Colors.red;
+      });
+       isAllValid = false;
+    }
+    if(!isAllValid){
+      return;
+    }
+
     Map<String, Map<String, dynamic>> newSchedule = {};
 
     for (var i = 0; i < days.length; i++) {
@@ -96,6 +146,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         selected: isSelected[text],
         onSelected: (bool selected) {
           setState(() {
+            _showError = false;
             isSelected[text] = !isSelected[text];
           });
         },
@@ -121,107 +172,133 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(10.0),
-                child: Column(
-                  children: <Widget>[
-                    CustomDivider('Pick the days'),
-                    Container(
-                      width: double.infinity,
-                      child: Column(
-                        children: <Widget>[
-                          FittedBox(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _filterChip('Monday'),
-                                _filterChip('Tuesday'),
-                                _filterChip('Wednesday'),
-                                _filterChip('Thursday'),
-                              ],
+                child: Form(
+                  key: _keyForm,
+                  child: Column(
+                    children: <Widget>[
+                      CustomDivider('Pick the days'),
+                      if(_showError)
+                      Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
+                          child: Text(
+                            'Please select a day.',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.red,
                             ),
                           ),
-                          FittedBox(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                _filterChip('Friday'),
-                                _filterChip('Saturday'),
-                                _filterChip('Sunday'),
-                              ],
+                        ),
+                      Container(
+                        width: double.infinity,
+                        child: Column(
+                          children: <Widget>[
+                            FittedBox(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _filterChip('Monday'),
+                                  _filterChip('Tuesday'),
+                                  _filterChip('Wednesday'),
+                                  _filterChip('Thursday'),
+                                ],
+                              ),
+                            ),
+                            FittedBox(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  _filterChip('Friday'),
+                                  _filterChip('Saturday'),
+                                  _filterChip('Sunday'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            child: Text(
+                              'Pick a time',
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          RaisedButton(
+                            onPressed: () {
+                              _timePicker(ButtomType.start);
+                            },
+                            child: Text(start == null
+                                ? 'Start'
+                                : '${start.format(context)}'),
+                            textColor: startError,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          RaisedButton(
+                            onPressed: () {
+                              _timePicker(ButtomType.finish);
+                            },
+                            child: Text(finish == null
+                                ? 'Finish'
+                                : '${finish.format(context)}'),
+                            textColor: finishError,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 15),
-                          child: Text(
-                            'Pick a time',
-                            style: TextStyle(
-                              color: Colors.grey[700],
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w300,
-                              fontSize: 16,
-                            ),
+                      CustomDivider('Classroom'),
+                      TextFormField(
+                        controller: _classroomController,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        RaisedButton(
-                          onPressed: () {
-                            _timePicker(ButtomType.start);
-                          },
-                          child: Text(start == null
-                              ? 'Start'
-                              : '${start.format(context)}'),
-                          textColor: Colors.white,
-                          color: Theme.of(context).accentColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).accentColor,
+                                width: 1.0),
                           ),
+                          border: OutlineInputBorder(),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        RaisedButton(
-                          onPressed: () {
-                            _timePicker(ButtomType.finish);
-                          },
-                          child: Text(finish == null
-                              ? 'Finish'
-                              : '${finish.format(context)}'),
-                          textColor: Colors.white,
-                          color: Theme.of(context).accentColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                        ),
-                      ],
-                    ),
-                    CustomDivider('Classroom'),
-                    TextField(
-                      controller: _classroomController,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).accentColor, width: 1.0),
-                        ),
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please provide the room name.';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -31,13 +31,18 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
   FocusNode _teacherNode;
   FocusNode _classroomNode;
   String _oldName;
-  var _isInit = true;
 
-  Color classColor = Colors.red;
+  var _isInit = true;
+  bool _hasASchedule = false;
+  final _formKey = GlobalKey<FormState>();
+
+  Color classColor;
+  Color classError = Colors.blueAccent[400];
 
   void _colorPicker(Color color) {
     setState(() {
       classColor = color;
+      classError = Colors.white;
     });
   }
 
@@ -71,6 +76,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
         _teacherController.text = _initValue['teacher'];
         classColor = _initValue['color'];
         newSchedule = _initValue['schedule'];
+        classError = Colors.white;
       }
     }
     _isInit = false;
@@ -106,7 +112,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
           FlatButton(
             onPressed: () {
               setState(() {
-                classColor = Colors.red;
+                classColor = classColor;
               });
               Navigator.of(context).pop();
             },
@@ -138,6 +144,31 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
   }
 
   void _addClasses() {
+    final isValid = _formKey.currentState.validate();
+    final colorValid = classColor != null;
+    final isScheduleValid = newSchedule != null;
+
+    var isAllValid = true;
+
+    if (!isValid) {
+      isAllValid = false;
+    }
+    if (!colorValid) {
+      setState(() {
+        classError = Colors.red;
+      });
+      isAllValid = false;
+    }
+    if (!isScheduleValid) {
+      setState(() {
+        _hasASchedule = true;
+      });
+      isAllValid = false;
+    }
+    if (!isAllValid) {
+      return;
+    }
+
     Provider.of<Classes>(context, listen: false).addItem(
       id: _initValue['id'] != null
           ? _initValue['id']
@@ -154,12 +185,15 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       );
     }
 
-    Navigator.of(context).pop();
+    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
   }
 
   Widget _scheduleCard({String dia, Map<String, dynamic> hour, bool haveDay}) {
     return InkWell(
       onTap: () async {
+        setState(() {
+          _hasASchedule = false;
+        });
         final scheduleItem =
             await Navigator.pushNamed(context, AddScheduleScreen.routeName)
                 as Map<String, Map<String, dynamic>>;
@@ -238,7 +272,6 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> daysList = [];
-
     if (newSchedule != null) {
       newSchedule.forEach((key, value) {
         daysList.add(_scheduleCard(dia: key, hour: value, haveDay: true));
@@ -263,98 +296,133 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    CustomDivider('Class Name'),
-                    TextField(
-                      autofocus: true,
-                      focusNode: _classNode,
-                      controller: _classController,
-                      decoration: InputDecoration(
-                        // labelText: 'Title',
-                        // labelStyle: TextStyle(
-                        //     fontSize: 20, fontWeight: FontWeight.bold),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).accentColor, width: 1.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      CustomDivider('Class Name'),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: _classNode,
+                        controller: _classController,
+                        decoration: InputDecoration(
+                          // labelText: 'Title',
+                          // labelStyle: TextStyle(
+                          //     fontSize: 20, fontWeight: FontWeight.bold),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).accentColor,
+                                width: 1.0),
+                          ),
+                          border: OutlineInputBorder(),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         ),
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        onFieldSubmitted: (_) {
+                          _focusNextNode(_teacherNode);
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please provide the name of the class';
+                          }
+                          return null;
+                        },
                       ),
-                      onSubmitted: (_) {
-                        _focusNextNode(_teacherNode);
-                      },
-                    ),
-                    CustomDivider('Teacher Name'),
-                    TextField(
-                      focusNode: _teacherNode,
-                      controller: _teacherController,
-                      decoration: InputDecoration(
-                        // labelText: 'Title',
-                        // labelStyle: TextStyle(
-                        //     fontSize: 20, fontWeight: FontWeight.bold),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).accentColor, width: 1.0),
+                      CustomDivider('Teacher Name'),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: _teacherNode,
+                        controller: _teacherController,
+                        decoration: InputDecoration(
+                          // labelText: 'Title',
+                          // labelStyle: TextStyle(
+                          //     fontSize: 20, fontWeight: FontWeight.bold),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).accentColor,
+                                width: 1.0),
+                          ),
+                          border: OutlineInputBorder(),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         ),
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        onFieldSubmitted: (_) {
+                          _focusNextNode(_classroomNode);
+                        },
+                        // validator: (value) {
+                        //   if (value.isEmpty) {
+                        //     return 'Please provide the name of the teacher';
+                        //   }
+                        //   return null;
+                        // },
                       ),
-                      onSubmitted: (_) {
-                        _focusNextNode(_classroomNode);
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: <Widget>[
+                      SizedBox(height: 10),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            child: Text(
+                              'Class Color',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ),
+                          RaisedButton(
+                            onPressed: _showColorPicker,
+                            child: Text('Pick a Color'),
+                            color:
+                                classColor != null ? classColor : Colors.white,
+                            textColor: classError,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                          Expanded(
+                            child: SizedBox(),
+                          ),
+                        ],
+                      ),
+                      CustomDivider('Add a schedule'),
+                      if (_hasASchedule)
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 15),
                           child: Text(
-                            'Class Color',
+                            'Please add a schedule',
                             style: TextStyle(
                               fontFamily: 'Montserrat',
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.w300,
-                              color: Colors.grey[700],
+                              color: Colors.red,
                             ),
                           ),
                         ),
-                        RaisedButton(
-                          onPressed: _showColorPicker,
-                          child: Text('Pick a Color'),
-                          color: classColor,
-                          textColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
+                      Container(
+                        width: double.infinity,
+                        height: 350,
+                        child: GridView(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 10),
+                          children: daysList,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200,
+                            childAspectRatio: 5 / 2,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5,
                           ),
                         ),
-                        Expanded(
-                          child: SizedBox(),
-                        ),
-                      ],
-                    ),
-                    CustomDivider('Add a schedule'),
-                    Container(
-                      width: double.infinity,
-                      height: 350,
-                      child: GridView(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 10),
-                        children: daysList,
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          childAspectRatio: 5 / 2,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
-                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
