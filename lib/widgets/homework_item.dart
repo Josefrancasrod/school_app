@@ -29,6 +29,24 @@ class HomeworkItem extends StatelessWidget {
     return stringType;
   }
 
+  String _stringWithOutEnter(String description) {
+    var cardDescription;
+    var hasAnEnter = description.contains('\n');
+
+    if (description.length < 30 && hasAnEnter) {
+      cardDescription = description.split('\n')[0];
+    } else if (description.length > 30 && hasAnEnter) {
+      cardDescription = description.split('\n')[0].length < 30
+          ? description.split('\n')[0]
+          : description.split('\n')[0].substring(0, 30) + "...";
+    } else {
+      cardDescription =
+          description.length < 30 ? description : description.substring(0, 30)+ "...";
+    }
+
+    return cardDescription;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,9 +80,7 @@ class HomeworkItem extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          homeworkItem.description.length > 35
-                              ? '${homeworkItem.description.substring(0, 35)} ...'
-                              : homeworkItem.description,
+                          _stringWithOutEnter(homeworkItem.description),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
