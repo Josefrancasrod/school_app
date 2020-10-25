@@ -95,6 +95,20 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     super.dispose();
   }
 
+  bool _nameExist(String name){
+    var listOfClasses = Provider.of<Classes>(context, listen: false)
+        .items
+        .map((item) => item)
+        .toList();
+    
+    for(var i=0; i < listOfClasses.length ; i++){
+      if(listOfClasses[i].name == name){
+        return true;
+      }
+    }
+    return false;
+  }
+
   void _showColorPicker() {
     _unFocusNode();
     showDialog(
@@ -326,6 +340,9 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please provide the name of the class';
+                          }
+                          if(_nameExist(value)){
+                            return 'That class already exist';
                           }
                           return null;
                         },
