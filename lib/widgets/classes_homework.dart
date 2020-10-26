@@ -43,7 +43,7 @@ class ClassesHomeworkCard extends StatelessWidget {
               ],
             ),
             Text(
-              className,
+              className.length < 8 ? className : className.substring(0,7) + '...',
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ],
