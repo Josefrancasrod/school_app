@@ -40,8 +40,9 @@ class HomeworkItem extends StatelessWidget {
           ? description.split('\n')[0]
           : description.split('\n')[0].substring(0, 30) + "...";
     } else {
-      cardDescription =
-          description.length < 30 ? description : description.substring(0, 30)+ "...";
+      cardDescription = description.length < 30
+          ? description
+          : description.substring(0, 30) + "...";
     }
 
     return cardDescription;
@@ -71,20 +72,26 @@ class HomeworkItem extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          homeworkItem.title,
-                          style: TextStyle(
-                            color: color,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900,
+                        FittedBox(
+                          child: Text(
+                            homeworkItem.title.length < 21
+                                ? homeworkItem.title
+                                : homeworkItem.title.substring(0, 20) + '...',
+                            style: TextStyle(
+                              color: color,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                            ),
                           ),
                         ),
-                        Text(
-                          _stringWithOutEnter(homeworkItem.description),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black54,
+                        FittedBox(
+                          child: Text(
+                            _stringWithOutEnter(homeworkItem.description),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black54,
+                            ),
                           ),
                         ),
                       ],
