@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/about-screen.dart';
 import '../screens/classes_screen.dart';
 import '../screens/new_classes_screen.dart';
 import '../screens/new_homework_screen.dart';
@@ -85,7 +86,7 @@ class BottomSheetMenu extends StatelessWidget {
                 ),
               ),
               title: Text(
-                'School App', //CHANGE THE NAME
+                'School App',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -93,7 +94,7 @@ class BottomSheetMenu extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                'Developed by @josefrancasrod', //CHANGE THE NAME
+                'Developed by @josefrancasrod',
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 14,
@@ -132,7 +133,9 @@ class BottomSheetMenu extends StatelessWidget {
               _optionButton(
                 Icons.info,
                 'About',
-                () {}, //Navigate to ABOUT SCREEN
+                () {
+                  Navigator.of(context).pushNamed(AboutScreen.routeName);
+                }, //Navigate to ABOUT SCREEN
               ),
             ],
           )

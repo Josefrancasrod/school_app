@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import './screens/about-screen.dart';
 import './screens/classes_screen.dart';
 import './screens/add_schedule_screen.dart';
 import './screens/new_homework_screen.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
           ClassesDetailScreen.routeName: (ctx) => ClassesDetailScreen(),
           AddScheduleScreen.routeName: (ctx) => AddScheduleScreen(),
           ClassesScreen.routeName: (ctx) => ClassesScreen(),
+          AboutScreen.routeName: (ctx) => AboutScreen()
         },
       ),
     );
