@@ -16,7 +16,7 @@ class ClassesCard extends StatelessWidget {
   }) {
     if (!containsData) {
       Navigator.of(ctx).pushNamed(
-        ClassesDetailScreen.routeName,
+        NewClassesScreen.routeName,
         arguments: classesItem,
       );
     } else {
