@@ -86,7 +86,7 @@ class BottomSheetMenu extends StatelessWidget {
                 ),
               ),
               title: Text(
-                'School App', //CHANGE THE NAME
+                'School App',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -94,7 +94,7 @@ class BottomSheetMenu extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                'Developed by @josefrancasrod', //CHANGE THE NAME
+                'Developed by @josefrancasrod',
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 14,
