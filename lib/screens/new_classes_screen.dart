@@ -83,7 +83,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
         _isEditing = false;
       }
     }
-        _isInit = false;
+    _isInit = false;
 
     super.didChangeDependencies();
   }
@@ -289,6 +289,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ClassesItem classItem = ModalRoute.of(context).settings.arguments;
+    final classes = Provider.of<Classes>(context, listen: false);
+    final homework = Provider.of<Homework>(context, listen: false);
+
     List<Widget> daysList = [];
     if (newSchedule != null) {
       newSchedule.forEach((key, value) {
@@ -307,6 +311,43 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
           'New Class',
           style: Theme.of(context).textTheme.headline6,
         ),
+        actions: [
+          if (classItem != null)
+            IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext) => AlertDialog(
+                      title: Text(
+                        'Are you sure?',
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            classes.deleteItem(classItem.id);
+                            homework.deleteByClassName(classItem.name);
+                            Navigator.of(context)
+                                .pushNamedAndRemoveUntil('/', (route) => false);
+                          },
+                          child: Text('OK'),
+                        )
+                      ],
+                      content: Text("This action cannot be undone."),
+                    ),
+                  );
+                }),
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -346,7 +387,9 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                             return 'Please provide the name of the class';
                           }
                           if (_nameExist(value)) {
-                            return _isEditing ? null : 'That class already exist';
+                            return _isEditing
+                                ? null
+                                : 'That class already exist';
                           }
                           return null;
                         },
