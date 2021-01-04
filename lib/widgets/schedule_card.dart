@@ -50,7 +50,7 @@ class ScheduleCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      className,
+                      className.length > 14 ? className.substring(0,10) + '...' : className,
                       style:TextStyle(
                             color: color,
                             fontSize: 25,
