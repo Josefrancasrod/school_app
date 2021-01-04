@@ -22,7 +22,7 @@ class HomeworkItem extends StatelessWidget {
         stringType = "Test";
         break;
       case homework.HomeworkType.proyect:
-        stringType = "Proyect";
+        stringType = "Project";
         break;
     }
 

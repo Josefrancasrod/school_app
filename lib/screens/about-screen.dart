@@ -35,11 +35,10 @@ class AboutScreen extends StatelessWidget {
               ),
               Center(
                 child: Text(
-                  'Hi! This app was created only as practice of app development with Flutter.' +
-                      ' This is version 1.0.0 that means the app only have basic functionalities and some bugs.' +
+                  'Hi! This app was created only as training of app development with Flutter.' +
                       ' If you want a new feature or you find a bug, please, let me know.' +
                       ' Also if you like the app make a good review on the store.' +
-                      '\n\nThe Flutter code is free and you can find it on my GitHub, if you want colaborate, you are free to make a fork or let a issue in the repo.' +
+                      '\n\nThe Flutter code is free and you can find it on my GitHub, if you want colaborate, you are free to make a fork or let an issue in the repo.' +
                       '\n\nThanks for ussing School App.\n\n',
                 ),
               ),
