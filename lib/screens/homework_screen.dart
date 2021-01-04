@@ -26,13 +26,19 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
     classes = Provider.of<Classes>(context, listen: false).items;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Color _getColor(String name) {
-      ClassesItem classItem = classes.firstWhere((element) => element.name == name);
-      return classItem.color;
+  Color _getColor(String name) {
+    ClassesItem classItem;
+    try {
+      classItem = classes.firstWhere((element) => element.name == name);
+    } catch (e) {
+      return null;
     }
 
+    return classItem.color;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Widget _listOfHomeWork() {
       return ListView.builder(
         itemCount: homework.itemCount,

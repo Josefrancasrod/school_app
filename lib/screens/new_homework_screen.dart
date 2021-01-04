@@ -129,7 +129,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   }
 
   Future<void> _goToNewClassScreen() async {
-    await Navigator.of(context).pushNamed(NewClassesScreen.routeName);
+    await Navigator.of(context).pushNamed(NewClassesScreen.routeName, arguments: {"isClassItem": false, "classItem": false});
     setState(() {
       mapOfClasses = {};
       _addAnewClass = true;
@@ -197,7 +197,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
     );
   }
 
-  void _addHomework() {
+  void _addHomework() async {
     final isValid = _formKey.currentState.validate();
     final hasAClass = _classValue != null;
     final hasADate = _selectedDate != null;
@@ -222,7 +222,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
       return;
     }
     
-    Provider.of<Homework>(context, listen: false).addItem(
+    await Provider.of<Homework>(context, listen: false).addItem(
       id: _initValue['id'] != null
           ? _initValue['id']
           : DateTime.now().toString(),
@@ -445,7 +445,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                       Column(
                         children: <Widget>[
                           _radioList('Homework', HomeworkType.homework),
-                          _radioList('Proyect', HomeworkType.proyect),
+                          _radioList('Project', HomeworkType.proyect),
                           _radioList('Test', HomeworkType.test),
                         ],
                       ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,7 @@ class NewClassesScreen extends StatefulWidget {
 class _NewClassesScreenState extends State<NewClassesScreen> {
   final _classController = TextEditingController();
   final _teacherController = TextEditingController();
+  bool _isFromNew;
   // final _classroomController = TextEditingController();
   Map<String, Map<String, dynamic>> newSchedule;
   Map<String, dynamic> _initValue = {
@@ -62,7 +65,8 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     // TODO: implement didChangeDependencies
 
     if (_isInit) {
-      final _item = ModalRoute.of(context).settings.arguments as ClassesItem;
+      final recivedClass = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      final _item = recivedClass['isClassItem'] ? recivedClass['classItem'] : null;
 
       if (_item != null) {
         _initValue = {
@@ -202,8 +206,8 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
         _classController.text,
       );
     }
-
-    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    if(!_isFromNew) Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    if(_isFromNew) Navigator.of(context).pop();
   }
 
   Widget _scheduleCard({String dia, Map<String, dynamic> hour, bool haveDay}) {
@@ -289,7 +293,11 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ClassesItem classItem = ModalRoute.of(context).settings.arguments;
+    final Map<String, dynamic> recivedItem = ModalRoute.of(context).settings.arguments;
+    ClassesItem classItem;
+    if(recivedItem["isClassItem"]) classItem = recivedItem["classItem"]; 
+    if(!recivedItem["isClassItem"]) _isFromNew = true;
+     
     final classes = Provider.of<Classes>(context, listen: false);
     final homework = Provider.of<Homework>(context, listen: false);
 
@@ -312,7 +320,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
           style: Theme.of(context).textTheme.headline6,
         ),
         actions: [
-          if (classItem != null)
+          if (recivedItem["isClassItem"])
             IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
