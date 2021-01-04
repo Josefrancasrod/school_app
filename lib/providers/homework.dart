@@ -34,7 +34,7 @@ class Homework with ChangeNotifier {
 
   Map<String, HomeworkItem> _items = {};
 
-  void addItem({
+  Future<void> addItem({
     String id,
     String title,
     String description,
@@ -84,6 +84,8 @@ class Homework with ChangeNotifier {
           'type': newHomework.type.index,
         },
       );
+
+      return null;
     }
     notifyListeners();
     // print(newHomework.type.index);
