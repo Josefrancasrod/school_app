@@ -249,8 +249,8 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                         fontWeight: FontWeight.bold,
                         color: classColor),
                   ),
-                  Column(
-                    children: <Widget>[
+                  // Column(
+                  //   children: <Widget>[
                       Text(
                         '${hour['Classroom']}',
                         style: TextStyle(
@@ -266,8 +266,8 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                           // color: Theme.of(context).primaryColor,
                         ),
                       ),
-                    ],
-                  ),
+                  //   ],
+                  // ),
                 ],
               )
             : Center(
@@ -372,6 +372,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                       CustomDivider('Class Name'),
                       TextFormField(
                         autofocus: false,
+                        textCapitalization: TextCapitalization.sentences,
                         focusNode: _classNode,
                         controller: _classController,
                         decoration: InputDecoration(
@@ -405,6 +406,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                       CustomDivider('Teacher Name'),
                       TextFormField(
                         autofocus: false,
+                        textCapitalization: TextCapitalization.sentences,
                         focusNode: _teacherNode,
                         controller: _teacherController,
                         decoration: InputDecoration(
@@ -478,7 +480,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                         ),
                       Container(
                         width: double.infinity,
-                        height: 350,
+                        height: 400,
                         child: GridView(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 0, vertical: 10),

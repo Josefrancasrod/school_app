@@ -276,6 +276,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                       CustomDivider('Classroom'),
                       TextFormField(
                         controller: _classroomController,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           labelStyle: TextStyle(
                             fontSize: 20,
