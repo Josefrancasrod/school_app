@@ -123,7 +123,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15.0, vertical: 10),
                       child: Text(
-                        'Assigments',
+                        'Assignments',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),

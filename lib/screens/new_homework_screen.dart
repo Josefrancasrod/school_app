@@ -286,6 +286,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                       CustomDivider('Title'),
                       TextFormField(
                         autofocus: false,
+                        textCapitalization: TextCapitalization.sentences,
                         focusNode: titleNode,
                         controller: titleController,
                         decoration: InputDecoration(
@@ -318,6 +319,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
                       CustomDivider('Description'),
                       TextFormField(
                         autofocus: false,
+                        textCapitalization: TextCapitalization.sentences,
                         focusNode: descriptionNode,
                         controller: descriptionController,
                         maxLines: 5,

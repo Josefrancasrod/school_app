@@ -56,7 +56,7 @@ class ClassesCard extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                     child: FittedBox(
                       child: Text(
-                        classesItem.name,
+                        classesItem.name.length > 13 ? classesItem.name.substring(0,9) + '...' : classesItem.name,
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           color: Colors.black,
