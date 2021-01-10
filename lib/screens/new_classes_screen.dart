@@ -205,7 +205,50 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     );
   }
 
-  void _addClasses(){
+  Future<void> _confirmation(String title, String desription, Function function){
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext) => AlertDialog(
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        ),
+        actions: [
+          TextButton(
+            onPressed: function,
+            child: Text('OK'),
+          )
+        ],
+        content: Text(
+            desription),
+      ),
+    );
+  }
+
+  void _somethingGoesWrong(String title, String desription){
+    showDialog(
+      context: context,
+      builder: (BuildContext) => AlertDialog(
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          )
+        ],
+        content: Text(
+            desription),
+      ),
+    );
+  }
+
+  void _addClasses() async {
     final isValid = _formKey.currentState.validate();
     final colorValid = classColor != null;
     final isScheduleValid = newSchedule != null;
@@ -230,29 +273,42 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     if (!isAllValid) {
       return;
     }
-
-    Provider.of<Classes>(context, listen: false).addItem(
-      id: _initValue['id'] != null
-          ? _initValue['id']
-          : DateTime.now().toString(),
-      name: _classController.text,
-      teacherName: _teacherController.text,
-      scheduleItem: newSchedule,
-      color: classColor,
-    );
-    if (_oldName != null) {
-      Provider.of<Homework>(context, listen: false).editClassName(
-        _oldName,
-        _classController.text,
+    try {
+      Provider.of<Classes>(context, listen: false).addItem(
+        id: _initValue['id'] != null
+            ? _initValue['id']
+            : DateTime.now().toString(),
+        name: _classController.text,
+        teacherName: _teacherController.text,
+        scheduleItem: newSchedule,
+        color: classColor,
       );
-    }
-    
-    if (!_isFromNew)
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-    if (_isFromNew && _isFromNewTask) {
-      Navigator.of(context).pop();
-    }else{
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      if (_oldName != null) {
+        Provider.of<Homework>(context, listen: false).editClassName(
+          _oldName,
+          _classController.text,
+        );
+      }
+      if (!_isFromNew)
+        _confirmation("Done", "The class was edited successfully.", (){
+          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        });
+      if (_isFromNew && _isFromNewTask) {
+        _confirmation("Done", "The class was created successfully.", (){
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        });
+         
+      }
+      if (_isFromNew && !_isFromNewTask) { 
+        _confirmation("Done", "The class was created successfully.", (){
+          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        });
+      }
+
+    } catch (e) {
+      _somethingGoesWrong("Error", "Something Goes Wrong.");
+      
     }
   }
 
@@ -355,10 +411,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       classItem = recivedItem["classItem"];
       _isFromNew = false;
     }
-    if (!recivedItem["isClassItem"]){
+    if (!recivedItem["isClassItem"]) {
       _isFromNew = true;
       _isFromNewTask = recivedItem["isFromNewTask"] ? true : false;
-    } 
+    }
 
     final classes = Provider.of<Classes>(context, listen: false);
     final homework = Provider.of<Homework>(context, listen: false);
