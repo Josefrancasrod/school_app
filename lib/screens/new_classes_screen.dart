@@ -65,8 +65,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     // TODO: implement didChangeDependencies
 
     if (_isInit) {
-      final recivedClass = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      final _item = recivedClass['isClassItem'] ? recivedClass['classItem'] : null;
+      final recivedClass =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      final _item =
+          recivedClass['isClassItem'] ? recivedClass['classItem'] : null;
 
       if (_item != null) {
         _initValue = {
@@ -206,8 +208,9 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
         _classController.text,
       );
     }
-    if(!_isFromNew) Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-    if(_isFromNew) Navigator.of(context).pop();
+    if (!_isFromNew)
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    if (_isFromNew) Navigator.of(context).pop();
   }
 
   Widget _scheduleCard({String dia, Map<String, dynamic> hour, bool haveDay}) {
@@ -238,37 +241,40 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       child: Container(
         padding: const EdgeInsets.all(10),
         child: haveDay
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    dia,
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: classColor),
-                  ),
-                  // Column(
-                  //   children: <Widget>[
-                      Text(
-                        '${hour['Classroom']}',
-                        style: TextStyle(
+            ? FittedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      dia,
+                      style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w300,
-                          // color: Theme.of(context).primaryColor
-                        ),
+                          fontWeight: FontWeight.bold,
+                          color: classColor),
+                    ),
+                    // Column(
+                    //   children: <Widget>[
+                    Text(
+                      '${hour['Classroom']}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        // color: Theme.of(context).primaryColor
                       ),
-                      Text(
-                        '${hour['Start'].format(context)} - ${hour['Finish'].format(context)}',
-                        style: TextStyle(
-                          fontSize: 10,
-                          // color: Theme.of(context).primaryColor,
-                        ),
+                    ),
+                    Text(
+                      '${hour['Start'].format(context)} - ${hour['Finish'].format(context)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300
+                        // color: Theme.of(context).primaryColor,
                       ),
-                  //   ],
-                  // ),
-                ],
+                    ),
+                    //   ],
+                    // ),
+                  ],
+                ),
               )
             : Center(
                 child: Icon(
@@ -293,11 +299,15 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> recivedItem = ModalRoute.of(context).settings.arguments;
+    final Map<String, dynamic> recivedItem =
+        ModalRoute.of(context).settings.arguments;
     ClassesItem classItem;
-    if(recivedItem["isClassItem"]) classItem = recivedItem["classItem"]; 
-    if(!recivedItem["isClassItem"]) _isFromNew = true;
-     
+    if (recivedItem["isClassItem"]) {
+      classItem = recivedItem["classItem"];
+      _isFromNew = false;
+    }
+    if (!recivedItem["isClassItem"]) _isFromNew = true;
+
     final classes = Provider.of<Classes>(context, listen: false);
     final homework = Provider.of<Homework>(context, listen: false);
 
