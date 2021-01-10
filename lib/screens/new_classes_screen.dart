@@ -124,7 +124,13 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Pick a color'),
+        title: Text(
+          'Pick a color',
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         content: Container(
           height: 200,
           child: MaterialColorPicker(
@@ -165,6 +171,37 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
   void _unFocusNode() {
     FocusScope.of(context).unfocus();
+  }
+
+  void _deleteDayFromSchedule(String dia) {
+    showDialog(
+      context: context,
+      builder: (BuildContext) => AlertDialog(
+        title: Text(
+          'Want to delete this day?',
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                newSchedule.remove(dia);
+              });
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          )
+        ],
+        content: Text(
+            "This action will remove the day from the schedule. You can add it later."),
+      ),
+    );
   }
 
   void _addClasses() {
@@ -215,6 +252,11 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
 
   Widget _scheduleCard({String dia, Map<String, dynamic> hour, bool haveDay}) {
     return InkWell(
+      onLongPress: haveDay
+          ? () {
+              _deleteDayFromSchedule(dia);
+            }
+          : null,
       onTap: () async {
         setState(() {
           _hasASchedule = false;
@@ -239,7 +281,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       splashColor: classColor,
       borderRadius: BorderRadius.circular(15),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 5,
+          vertical: 10,
+        ),
         child: haveDay
             ? FittedBox(
                 child: Column(
@@ -265,11 +310,9 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                     ),
                     Text(
                       '${hour['Start'].format(context)} - ${hour['Finish'].format(context)}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w300
-                        // color: Theme.of(context).primaryColor,
-                      ),
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300
+                          // color: Theme.of(context).primaryColor,
+                          ),
                     ),
                     //   ],
                     // ),
@@ -340,9 +383,9 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
                       title: Text(
                         'Are you sure?',
                         style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w600),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       actions: [
                         TextButton(
