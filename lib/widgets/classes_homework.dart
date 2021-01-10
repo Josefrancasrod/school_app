@@ -34,17 +34,27 @@ class ClassesHomeworkCard extends StatelessWidget {
               children: <Widget>[
                 Text(
                   numberOfHomework > 0 ? '$numberOfHomework ' : 'No ',
-                  style: TextStyle(fontFamily: 'Montserrat',fontSize: 20, color: Colors.black),
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 20,
+                      color: Colors.black),
                 ),
                 Text(
                   numberOfHomework != 1 ? 'Tasks' : 'Task',
-                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 20, color: Colors.black),
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 20,
+                      color: Colors.black),
                 ),
               ],
             ),
-            Text(
-              className.length < 8 ? className : className.substring(0,7) + '...',
-              style: Theme.of(context).textTheme.bodyText1,
+            FittedBox(
+              child: Text(
+                className.length < 8
+                    ? className
+                    : className.substring(0, 7) + '...',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
             ),
           ],
         ),
