@@ -241,37 +241,40 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       child: Container(
         padding: const EdgeInsets.all(10),
         child: haveDay
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    dia,
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: classColor),
-                  ),
-                  // Column(
-                  //   children: <Widget>[
-                  Text(
-                    '${hour['Classroom']}',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w300,
-                      // color: Theme.of(context).primaryColor
+            ? FittedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      dia,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: classColor),
                     ),
-                  ),
-                  Text(
-                    '${hour['Start'].format(context)} - ${hour['Finish'].format(context)}',
-                    style: TextStyle(
-                      fontSize: 10,
-                      // color: Theme.of(context).primaryColor,
+                    // Column(
+                    //   children: <Widget>[
+                    Text(
+                      '${hour['Classroom']}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        // color: Theme.of(context).primaryColor
+                      ),
                     ),
-                  ),
-                  //   ],
-                  // ),
-                ],
+                    Text(
+                      '${hour['Start'].format(context)} - ${hour['Finish'].format(context)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300
+                        // color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    //   ],
+                    // ),
+                  ],
+                ),
               )
             : Center(
                 child: Icon(
