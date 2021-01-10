@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class NextClassCard extends StatelessWidget {
-
   final String className;
   final String start;
   final String finish;
@@ -16,7 +15,7 @@ class NextClassCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 5),
       width: double.infinity,
       height: 150,
-      child: Card( 
+      child: Card(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -51,10 +50,7 @@ class NextClassCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  CircleAvatar(
-                    radius: 10,
-                    backgroundColor: color
-                  ),
+                  CircleAvatar(radius: 10, backgroundColor: color),
                 ],
               ),
               Row(
@@ -64,9 +60,13 @@ class NextClassCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        className,
-                        style: Theme.of(context).textTheme.bodyText1,
+                      FittedBox(
+                        child: Text(
+                          className.length > 14
+                              ? className.substring(0, 14) + '...'
+                              : className,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
                       ),
                       Text(
                         '$start - $finish',
