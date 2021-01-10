@@ -20,6 +20,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
   final _classController = TextEditingController();
   final _teacherController = TextEditingController();
   bool _isFromNew;
+  bool _isFromNewTask;
   // final _classroomController = TextEditingController();
   Map<String, Map<String, dynamic>> newSchedule;
   Map<String, dynamic> _initValue = {
@@ -204,7 +205,7 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
     );
   }
 
-  void _addClasses() {
+  void _addClasses(){
     final isValid = _formKey.currentState.validate();
     final colorValid = classColor != null;
     final isScheduleValid = newSchedule != null;
@@ -245,9 +246,14 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
         _classController.text,
       );
     }
+    
     if (!_isFromNew)
       Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-    if (_isFromNew) Navigator.of(context).pop();
+    if (_isFromNew && _isFromNewTask) {
+      Navigator.of(context).pop();
+    }else{
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    }
   }
 
   Widget _scheduleCard({String dia, Map<String, dynamic> hour, bool haveDay}) {
@@ -349,7 +355,10 @@ class _NewClassesScreenState extends State<NewClassesScreen> {
       classItem = recivedItem["classItem"];
       _isFromNew = false;
     }
-    if (!recivedItem["isClassItem"]) _isFromNew = true;
+    if (!recivedItem["isClassItem"]){
+      _isFromNew = true;
+      _isFromNewTask = recivedItem["isFromNewTask"] ? true : false;
+    } 
 
     final classes = Provider.of<Classes>(context, listen: false);
     final homework = Provider.of<Homework>(context, listen: false);

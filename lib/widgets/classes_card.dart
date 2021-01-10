@@ -20,7 +20,11 @@ class ClassesCard extends StatelessWidget {
         arguments: {"isClassItem": true, "classItem": classesItem},
       );
     } else {
-      Navigator.of(ctx).pushNamed(NewClassesScreen.routeName, arguments: {"isClassItem": false, "classItem": null});
+      Navigator.of(ctx).pushNamed(NewClassesScreen.routeName, arguments: {
+        "isClassItem": false,
+        "classItem": null,
+        "isFromNewTask": false,
+      });
     }
   }
 
@@ -56,7 +60,9 @@ class ClassesCard extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                     child: FittedBox(
                       child: Text(
-                        classesItem.name.length > 13 ? classesItem.name.substring(0,9) + '...' : classesItem.name,
+                        classesItem.name.length > 13
+                            ? classesItem.name.substring(0, 9) + '...'
+                            : classesItem.name,
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           color: Colors.black,

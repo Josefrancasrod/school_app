@@ -129,7 +129,7 @@ class _NewHomeworkScreenState extends State<NewHomeworkScreen> {
   }
 
   Future<void> _goToNewClassScreen() async {
-    await Navigator.of(context).pushNamed(NewClassesScreen.routeName, arguments: {"isClassItem": false, "classItem": false});
+    await Navigator.of(context).pushNamed(NewClassesScreen.routeName, arguments: {"isClassItem": false, "classItem": false, "isFromNewTask": true,});
     setState(() {
       mapOfClasses = {};
       _addAnewClass = true;

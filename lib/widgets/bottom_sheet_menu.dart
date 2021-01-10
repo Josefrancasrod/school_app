@@ -119,7 +119,14 @@ class BottomSheetMenu extends StatelessWidget {
                 Icons.school,
                 'Add a new class',
                 () {
-                  Navigator.of(context).pushNamed(NewClassesScreen.routeName, arguments: {"isClassItem": false, "classItem": false});
+                  Navigator.of(context).pushNamed(
+                    NewClassesScreen.routeName,
+                    arguments: {
+                      "isClassItem": false,
+                      "classItem": false,
+                      "isFromNewTask": false,
+                    },
+                  );
                 },
               ),
               _optionButton(
