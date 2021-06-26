@@ -18,6 +18,8 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
 
   var classes;
 
+  bool itsFiltered = false;
+
   Future<void> _fetchData(BuildContext context) async {
     await Provider.of<Classes>(context, listen: false).fetchAndSetClases();
     await Provider.of<Homework>(context, listen: false).fetchAndSetHomework();
@@ -41,7 +43,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
   Widget build(BuildContext context) {
     Widget _listOfHomeWork() {
       return ListView.builder(
-        itemCount: homework.itemCount,
+        itemCount: itsFiltered ? homework.numberOfHomework('asdasd6') : homework.itemCount,
         itemBuilder: (ctx, i) => hw.HomeworkItem(
           homework.items.values.toList()[i],
           _getColor(homework.items.values.toList()[i].asignature),
@@ -64,6 +66,27 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
               // height: 275,
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: BottomSheetMenu(),
+            ),
+          ],
+        ),
+      );
+    }
+
+    void modalFilter() {
+      showModalBottomSheet(
+        context: context,
+        enableDrag: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(30),
+          ),
+        ),
+        builder: (ctx) => Wrap(
+          children: <Widget>[
+            Container(
+              // height: 275,
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Center(child: Text("FILTER"),),
             ),
           ],
         ),
@@ -122,9 +145,28 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15.0, vertical: 10),
-                      child: Text(
-                        'Assignments',
-                        style: Theme.of(context).textTheme.headline6,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Assignments',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          IconButton(onPressed: (){
+                            if(!itsFiltered){
+                              setState(() {
+                                homework = Provider.of<Homework>(context, listen: false).filteredByClass("asdasd6");
+                                itsFiltered = true;  
+                              });
+                              
+                            }else{
+                              setState(() {
+                                homework = Provider.of<Homework>(context, listen: false);
+                                itsFiltered = false;  
+                              });
+                            }
+                          }, icon: Icon(Icons.menu),)
+                        ],
                       ),
                     ),
                   ),
