@@ -159,13 +159,21 @@ class Homework with ChangeNotifier {
     return totalHomework;
   }
 
-  Map<String, HomeworkItem> filteredByClass(String name) {
+  Map<String, HomeworkItem> itemsFiltered(Map <String, dynamic> filters) {
+    //filters should be
+    //{
+    //  isFilterByDate: true/false
+    //  isFilterBYName: string
+    //  filterInfo: dateLastToNow/dateFromNowToLast/className     
+    //}
+  
     Map<String, HomeworkItem> listOfHomework = {};
-    _items.forEach((key, value) {
+    /*_items.forEach((key, value) {
       if (value.asignature == name) {
         listOfHomework.putIfAbsent(key, () => value);
       }
     });
+    */
     return listOfHomework;
   }
 

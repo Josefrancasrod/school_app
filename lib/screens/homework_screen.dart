@@ -153,18 +153,8 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           IconButton(onPressed: (){
-                            if(!itsFiltered){
-                              setState(() {
-                                homework = Provider.of<Homework>(context, listen: false).filteredByClass("asdasd6");
-                                itsFiltered = true;  
-                              });
-                              
-                            }else{
-                              setState(() {
-                                homework = Provider.of<Homework>(context, listen: false);
-                                itsFiltered = false;  
-                              });
-                            }
+                            // HERE GOES MODAL
+                            // that select the filter
                           }, icon: Icon(Icons.menu),)
                         ],
                       ),
